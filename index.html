@@ -1,0 +1,3070 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="artifact-type" content="tool">
+  <meta name="design-style" content="bauhaus">
+  <title>Sóng Điện Từ &amp; Thang Sóng Điện Từ — Thầy PGT-THPT La Gi</title>
+
+  <!-- Fonts: Space Grotesk, Inter, JetBrains Mono (hỗ trợ đầy đủ tiếng Việt) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- KaTeX cho ký hiệu toán học/vật lý chính xác -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.18.2/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.18.2/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.18.2/dist/contrib/auto-render.min.js"></script>
+
+  <!-- Lucide Icons -->
+  <script defer src="https://unpkg.com/lucide@1.43.0/dist/umd/lucide.min.js"></script>
+
+  <style>
+    :root {
+      color-scheme: light;
+
+      /* Page and surfaces (Bauhaus sáng rực rỡ, tương phản cao) */
+      --background: #f5f0e8;
+      --surface-container-low: #ffffff;
+      --surface-container: #eee9e0;
+      --surface-container-high: #e8e3da;
+      --stage-bg: #ffffff;
+
+      /* Ink */
+      --on-surface: #1a1a1a;
+      --on-surface-variant: #4a4a4a;
+
+      /* Lines */
+      --outline: #1a1a1a;
+      --outline-variant: #d0cbc3;
+
+      /* Accents */
+      --primary: #1a1a1a;
+      --on-primary: #ffffff;
+      --primary-container: #ffcc00;
+      --on-primary-container: #1a1a1a;
+      --secondary: #e63b2e;
+      --tertiary: #0055ff;
+      --on-tertiary: #ffffff;
+      --error: #cc0000;
+      --on-error: #ffffff;
+
+      /* Physics vector & semantic tokens */
+      --vec-e: #e63b2e;
+      --vec-e-text: #b81d13;
+      --vec-e-fill: rgba(230, 59, 46, 0.14);
+      --vec-b: #0055ff;
+      --vec-b-text: #0044cc;
+      --vec-b-fill: rgba(0, 85, 255, 0.14);
+      --vec-v: #0f766e;
+      --vec-v-text: #0f766e;
+      --vec-v-fill: rgba(15, 118, 110, 0.14);
+      --probe-accent: #ffcc00;
+
+      /* Spectrum band tokens */
+      --band-radio: #0055ff;
+      --band-micro: #0f766e;
+      --band-ir: #b81d13;
+      --band-vis: #1a1a1a;
+      --band-uv: #6d28d9;
+      --band-xray: #0369a1;
+      --band-gamma: #9d174d;
+
+      /* Visible light sub-bands (flat Bauhaus strips) */
+      --vis-red: #dc2626;
+      --vis-orange: #ea580c;
+      --vis-yellow: #eab308;
+      --vis-green: #16a34a;
+      --vis-cyan: #0891b2;
+      --vis-blue: #2563eb;
+      --vis-violet: #7c3aed;
+
+      /* Data series */
+      --data-1: #e63b2e;
+      --data-2: #0055ff;
+      --data-3: #1a1a1a;
+      --data-4: #9a7300;
+      --data-context: #b5afa5;
+
+      /* Fonts */
+      --font-headline: 'Space Grotesk', 'Inter', sans-serif;
+      --font-body: 'Inter', sans-serif;
+      --font-label: 'Space Grotesk', 'Inter', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+
+      /* Shape */
+      --rounded: 0.125rem;
+      --rounded-lg: 0.25rem;
+      --rounded-full: 0.75rem;
+
+      /* Style effects */
+      --border-thick: 3px solid var(--outline);
+      --border-medium: 2px solid var(--outline);
+      --offset-shadow: 5px 5px 0 var(--outline);
+      --offset-shadow-sm: 3px 3px 0 var(--outline);
+      --rule-heavy: 6px solid var(--outline);
+
+      /* Shared tokens */
+      --positive: #0f766e;
+      --warning: #b45309;
+      --focus: #0055ff;
+
+      /* Type scale (Focused Tool) */
+      --display-size: clamp(1.95rem, 1.35rem + 2.1vw, 3.1rem);
+      --headline-size: clamp(1.3rem, 1.1rem + 0.75vw, 1.75rem);
+      --subhead-size: clamp(1.0625rem, 1rem + 0.25vw, 1.2rem);
+      --body-size: clamp(0.9375rem, 0.9rem + 0.15vw, 1rem);
+      --label-size: 0.75rem;
+
+      /* Spacing scale */
+      --space-xs: 0.25rem;
+      --space-sm: 0.5rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2.5rem;
+      --space-2xl: 4rem;
+
+      /* Motion */
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+      --dur-micro: 120ms;
+      --dur-short: 220ms;
+      --dur-long: 420ms;
+    }
+
+    /* Base reset */
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body {
+      overflow-x: clip;
+      margin: 0;
+      padding: 0;
+      background-color: var(--background);
+      background-image:
+        linear-gradient(to right, var(--outline-variant) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--outline-variant) 1px, transparent 1px);
+      background-size: 32px 32px;
+      color: var(--on-surface);
+      font-family: var(--font-body);
+      font-size: var(--body-size);
+      line-height: 1.55;
+    }
+
+    header { position: static !important; }
+
+    button, input, select, textarea {
+      font-family: inherit;
+    }
+
+    :focus-visible {
+      outline: 3px solid var(--focus);
+      outline-offset: 2px;
+    }
+
+    .page-grid {
+      display: grid;
+      gap: var(--space-xl);
+      padding: var(--space-lg);
+      max-width: 1320px;
+      margin: 0 auto;
+    }
+    .page-grid * { min-width: 0; }
+
+    /* Header / Masthead */
+    .masthead {
+      display: grid;
+      grid-template-columns: minmax(0, 1.8fr) minmax(0, 1fr);
+      gap: var(--space-lg);
+      align-items: start;
+      border-bottom: var(--rule-heavy);
+      padding-bottom: var(--space-lg);
+    }
+
+    .kicker {
+      display: inline-block;
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      background: var(--primary);
+      color: var(--on-primary);
+      padding: var(--space-xs) var(--space-sm);
+      margin-bottom: var(--space-sm);
+    }
+
+    .title {
+      font-family: var(--font-headline);
+      font-weight: 700;
+      font-size: var(--display-size);
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      margin: 0 0 var(--space-sm) 0;
+      color: var(--on-surface);
+    }
+
+    .title mark {
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+      padding-inline: var(--space-xs);
+      box-decoration-break: clone;
+    }
+
+    .lede {
+      margin: 0;
+      max-width: 65ch;
+      color: var(--on-surface-variant);
+      font-size: var(--subhead-size);
+    }
+
+    /* Brand Copyright Plate (Thầy PGT-THPT La Gi) */
+    .brand-plate {
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+      border: var(--border-thick);
+      border-radius: var(--rounded);
+      box-shadow: var(--offset-shadow);
+      padding: var(--space-md) var(--space-lg);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+
+    .brand-plate-kicker {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+
+    .brand-plate-name {
+      font-family: var(--font-headline);
+      font-size: clamp(1.25rem, 1.1rem + 0.6vw, 1.65rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+    }
+
+    .brand-plate-sub {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--on-surface);
+      border-top: var(--border-medium);
+      padding-top: var(--space-xs);
+      margin-top: var(--space-xs);
+    }
+
+    /* Section Openings */
+    .section-open {
+      border-top: var(--space-sm) solid var(--section-accent, var(--tertiary));
+      padding-top: var(--space-md);
+      margin-bottom: var(--space-md);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: var(--space-md);
+    }
+
+    .section-open.accent-blue { --section-accent: var(--tertiary); }
+    .section-open.accent-red { --section-accent: var(--secondary); }
+    .section-open.accent-yellow { --section-accent: var(--primary-container); }
+
+    .section-heading {
+      font-family: var(--font-headline);
+      font-size: var(--headline-size);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      margin: var(--space-xs) 0 0 0;
+    }
+
+    /* Bauhaus Block */
+    .block {
+      border: var(--border-thick);
+      border-radius: var(--rounded);
+      box-shadow: var(--offset-shadow);
+      background: var(--surface-container-low);
+      padding: var(--space-lg);
+    }
+
+    .block-tint {
+      background: var(--surface-container);
+    }
+
+    /* Simulator Workspace Grid */
+    .sim-workspace {
+      display: grid;
+      grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr);
+      gap: var(--space-lg);
+      align-items: start;
+    }
+
+    .stage-card {
+      padding: 0;
+      overflow: hidden;
+      background: var(--stage-bg);
+    }
+
+    .stage-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-sm);
+      padding: var(--space-sm) var(--space-md);
+      background: var(--surface-container);
+      border-bottom: var(--border-thick);
+    }
+
+    .cam-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-xs);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-xs);
+      min-height: 44px;
+      padding: var(--space-xs) var(--space-md);
+      border: var(--border-medium);
+      border-radius: var(--rounded);
+      background: var(--surface-container-low);
+      color: var(--on-surface);
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      box-shadow: var(--offset-shadow-sm);
+      transition: transform var(--dur-micro) var(--ease-out),
+                  background-color var(--dur-micro) var(--ease-out),
+                  color var(--dur-micro) var(--ease-out),
+                  box-shadow var(--dur-micro) var(--ease-out);
+    }
+
+    .btn:hover {
+      background: var(--primary);
+      color: var(--on-primary);
+    }
+
+    .btn:active {
+      transform: translate(3px, 3px);
+      box-shadow: none;
+    }
+
+    .btn-primary {
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+    }
+
+    .btn-blue {
+      background: var(--tertiary);
+      color: var(--on-tertiary);
+    }
+
+    .btn.is-active {
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+    }
+
+    .btn-compact {
+      min-height: 38px;
+      padding: var(--space-xs) var(--space-sm);
+    }
+
+    /* Canvas Container */
+    .canvas-wrap {
+      position: relative;
+      width: 100%;
+      min-height: 460px;
+      height: 500px;
+      background: var(--stage-bg);
+      cursor: grab;
+      touch-action: none;
+      user-select: none;
+    }
+
+    .canvas-wrap:active {
+      cursor: grabbing;
+    }
+
+    #emWaveCanvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Legend & Orthogonality Strip under Canvas */
+    .stage-legend {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(180px, 100%), 1fr));
+      gap: var(--space-sm);
+      padding: var(--space-md);
+      background: var(--surface-container);
+      border-top: var(--border-thick);
+    }
+
+    .vec-badge {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      padding: var(--space-xs) var(--space-sm);
+      background: var(--surface-container-low);
+      border: var(--border-medium);
+      font-size: 0.875rem;
+      font-weight: 600;
+    }
+
+    .vec-swatch {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+      border: var(--border-medium);
+    }
+    .swatch-e { background: var(--vec-e); }
+    .swatch-b { background: var(--vec-b); }
+    .swatch-v { background: var(--vec-v); }
+
+    .vec-label-e { color: var(--vec-e-text); font-weight: 700; }
+    .vec-label-b { color: var(--vec-b-text); font-weight: 700; }
+    .vec-label-v { color: var(--vec-v-text); font-weight: 700; }
+
+    /* Control Deck */
+    .control-deck {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+      padding-bottom: var(--space-md);
+      border-bottom: var(--border-medium);
+    }
+    .control-group:last-child {
+      border-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .group-title {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--on-surface);
+      margin: 0;
+    }
+
+    .playback-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+    }
+
+    /* Layer Toggles */
+    .toggle-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-xs);
+    }
+
+    .toggle-pill {
+      display: flex;
+      align-items: center;
+      gap: var(--space-xs);
+      min-height: 44px;
+      padding: var(--space-xs) var(--space-sm);
+      border: var(--border-medium);
+      background: var(--surface-container-low);
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .toggle-pill input {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--primary);
+      cursor: pointer;
+      margin: 0;
+    }
+
+    /* Sliders & Labels */
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+
+    .field-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: var(--space-sm);
+    }
+
+    .field label {
+      font-family: var(--font-label);
+      font-size: 0.8125rem;
+      font-weight: 700;
+      color: var(--on-surface);
+    }
+
+    .mono-val {
+      font-family: var(--font-mono);
+      font-size: 0.875rem;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+      padding: 2px 6px;
+      border: 1px solid var(--outline);
+    }
+
+    input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 12px;
+      background: var(--surface-container-high);
+      border: var(--border-medium);
+      cursor: pointer;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 24px;
+      height: 24px;
+      background: var(--primary-container);
+      border: var(--border-thick);
+      cursor: pointer;
+    }
+
+    input[type="range"]::-moz-range-thumb {
+      width: 24px;
+      height: 24px;
+      background: var(--primary-container);
+      border: var(--border-thick);
+      border-radius: 0;
+      cursor: pointer;
+    }
+
+    .preset-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-xs);
+    }
+
+    .chip-btn {
+      min-height: 36px;
+      padding: 4px 10px;
+      border: var(--border-medium);
+      background: var(--surface-container);
+      color: var(--on-surface);
+      font-family: var(--font-label);
+      font-size: 0.75rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background-color var(--dur-micro) var(--ease-out);
+    }
+    .chip-btn:hover, .chip-btn.is-active {
+      background: var(--tertiary);
+      color: var(--on-tertiary);
+    }
+
+    /* Live Telemetry Cards */
+    .telemetry-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-sm);
+    }
+
+    .stat-box {
+      border: var(--border-medium);
+      background: var(--surface-container);
+      padding: var(--space-sm);
+    }
+
+    .stat-label {
+      font-family: var(--font-label);
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--on-surface-variant);
+    }
+
+    .stat-num {
+      font-family: var(--font-mono);
+      font-size: 1.05rem;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      color: var(--on-surface);
+      margin-top: 2px;
+    }
+
+    /* In-phase meter */
+    .phase-sync-box {
+      border: var(--border-medium);
+      background: var(--surface-container-low);
+      padding: var(--space-sm);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+
+    .meter-row {
+      display: grid;
+      grid-template-columns: 52px minmax(0, 1fr) 64px;
+      align-items: center;
+      gap: var(--space-xs);
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+
+    .meter-track {
+      position: relative;
+      height: 14px;
+      background: var(--surface-container);
+      border: 1px solid var(--outline);
+      overflow: hidden;
+    }
+
+    .meter-center {
+      position: absolute;
+      left: 50%;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--outline);
+      z-index: 2;
+    }
+
+    .meter-fill {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 0;
+    }
+    .meter-fill-e { background: var(--vec-e); }
+    .meter-fill-b { background: var(--vec-b); }
+
+    /* ===================================================================== */
+    /* SECTION 2: ELECTROMAGNETIC SPECTRUM                                   */
+    /* ===================================================================== */
+    .spectrum-shell {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-lg);
+    }
+
+    .spectrum-directions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: var(--space-sm);
+      font-family: var(--font-label);
+      font-size: 0.8125rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .dir-tag {
+      padding: var(--space-xs) var(--space-sm);
+      border: var(--border-medium);
+      background: var(--surface-container);
+    }
+
+    /* 7 Radiation Band Buttons */
+    .band-strip {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: var(--space-xs);
+    }
+
+    .band-btn {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 92px;
+      padding: var(--space-sm);
+      border: var(--border-thick);
+      background: var(--surface-container-low);
+      color: var(--on-surface);
+      text-align: left;
+      cursor: pointer;
+      box-shadow: var(--offset-shadow-sm);
+      transition: transform var(--dur-micro) var(--ease-out),
+                  background-color var(--dur-micro) var(--ease-out),
+                  box-shadow var(--dur-micro) var(--ease-out);
+    }
+
+    .band-btn:hover {
+      background: var(--surface-container);
+    }
+
+    .band-btn.is-active {
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+      transform: translate(-2px, -2px);
+      box-shadow: var(--offset-shadow);
+    }
+
+    .band-bar-top {
+      height: 8px;
+      width: 100%;
+      border: 1px solid var(--outline);
+      margin-bottom: var(--space-xs);
+    }
+    .bar-radio { background: var(--band-radio); }
+    .bar-micro { background: var(--band-micro); }
+    .bar-ir { background: var(--band-ir); }
+    .bar-vis {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      padding: 0;
+      overflow: hidden;
+    }
+    .bar-uv { background: var(--band-uv); }
+    .bar-xray { background: var(--band-xray); }
+    .bar-gamma { background: var(--band-gamma); }
+
+    .vis-seg-red { background: var(--vis-red); }
+    .vis-seg-orange { background: var(--vis-orange); }
+    .vis-seg-yellow { background: var(--vis-yellow); }
+    .vis-seg-green { background: var(--vis-green); }
+    .vis-seg-cyan { background: var(--vis-cyan); }
+    .vis-seg-blue { background: var(--vis-blue); }
+    .vis-seg-violet { background: var(--vis-violet); }
+
+    .band-name {
+      font-family: var(--font-headline);
+      font-weight: 700;
+      font-size: 0.9375rem;
+      line-height: 1.15;
+    }
+
+    .band-range {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--on-surface-variant);
+      margin-top: var(--space-xs);
+    }
+    .band-btn.is-active .band-range {
+      color: var(--on-surface);
+      font-weight: 700;
+    }
+
+    /* Logarithmic Scrubber */
+    .scrubber-panel {
+      border: var(--border-thick);
+      background: var(--surface-container);
+      padding: var(--space-md);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+
+    .tick-ruler {
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--on-surface-variant);
+    }
+
+    .live-spectrum-metrics {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(180px, 100%), 1fr));
+      gap: var(--space-sm);
+      margin-top: var(--space-xs);
+    }
+
+    /* Band Inspector Panel */
+    .inspector-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr);
+      gap: var(--space-lg);
+      align-items: start;
+    }
+
+    .inspector-summary {
+      border: var(--border-thick);
+      background: var(--surface-container-low);
+      padding: var(--space-lg);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+
+    .inspector-title-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-sm);
+      border-bottom: var(--border-thick);
+      padding-bottom: var(--space-sm);
+    }
+
+    .inspector-title {
+      font-family: var(--font-headline);
+      font-size: 1.45rem;
+      font-weight: 700;
+      margin: 0;
+    }
+
+    .band-tag {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border: var(--border-medium);
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+    }
+
+    .spec-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+    .spec-table th, .spec-table td {
+      padding: var(--space-xs) 0;
+      border-bottom: 1px solid var(--outline-variant);
+      text-align: left;
+      vertical-align: top;
+    }
+    .spec-table th {
+      font-family: var(--font-label);
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      color: var(--on-surface-variant);
+      width: 42%;
+    }
+    .spec-table td {
+      font-family: var(--font-mono);
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Visible Light Interactive Sub-palette */
+    .vis-subbar {
+      border: var(--border-medium);
+      background: var(--surface-container);
+      padding: var(--space-sm);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+    .vis-colors {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+    }
+    .vis-color-btn {
+      min-height: 36px;
+      border: var(--border-medium);
+      color: var(--on-primary);
+      font-family: var(--font-label);
+      font-size: 0.7rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .vis-color-btn.text-dark {
+      color: var(--on-surface);
+    }
+
+    .scale-compare-box {
+      border: var(--border-medium);
+      background: var(--surface-container);
+      padding: var(--space-sm);
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+    }
+
+    .scale-svg-box {
+      width: 72px;
+      height: 72px;
+      flex-shrink: 0;
+      border: var(--border-medium);
+      background: var(--surface-container-low);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .inspector-details {
+      border: var(--border-thick);
+      background: var(--surface-container-low);
+      padding: var(--space-lg);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+
+    .detail-block h4 {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      background: var(--primary);
+      color: var(--on-primary);
+      display: inline-block;
+      padding: 2px 8px;
+      margin: 0 0 var(--space-xs) 0;
+    }
+
+    .detail-block p, .detail-block ul {
+      margin: 0;
+      padding-left: 0;
+      list-style: none;
+    }
+    .detail-block li {
+      position: relative;
+      padding-left: 1.1rem;
+      margin-bottom: 4px;
+    }
+    .detail-block li::before {
+      content: "▪";
+      position: absolute;
+      left: 0;
+      color: var(--tertiary);
+      font-weight: 700;
+    }
+
+    /* ===================================================================== */
+    /* SECTION 3: CORE CONCEPTS & QUICK QUIZ                                 */
+    /* ===================================================================== */
+    .principles-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+      gap: var(--space-lg);
+    }
+
+    .principle-card {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+
+    .principle-card.featured {
+      background: var(--primary-container);
+    }
+
+    .principle-card h3 {
+      font-family: var(--font-headline);
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin: 0;
+    }
+
+    .formula-strip {
+      background: var(--surface-container-low);
+      border: var(--border-medium);
+      padding: var(--space-sm);
+      font-size: 1rem;
+      text-align: center;
+      overflow-x: auto;
+    }
+
+    /* Quick Quiz */
+    .quiz-block {
+      margin-top: var(--space-lg);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+
+    .quiz-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+
+    .quiz-options {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
+      gap: var(--space-sm);
+    }
+
+    .quiz-opt {
+      min-height: 52px;
+      padding: var(--space-sm) var(--space-md);
+      border: var(--border-thick);
+      background: var(--surface-container-low);
+      color: var(--on-surface);
+      text-align: left;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: var(--offset-shadow-sm);
+      transition: transform var(--dur-micro) var(--ease-out),
+                  background-color var(--dur-micro) var(--ease-out);
+    }
+
+    .quiz-opt:hover {
+      background: var(--surface-container);
+    }
+
+    .quiz-opt.is-correct {
+      background: var(--positive);
+      color: var(--on-primary);
+    }
+
+    .quiz-opt.is-wrong {
+      background: var(--error);
+      color: var(--on-error);
+    }
+
+    .quiz-feedback {
+      padding: var(--space-sm) var(--space-md);
+      border: var(--border-medium);
+      background: var(--surface-container);
+      font-weight: 500;
+    }
+
+    /* Footer */
+    .site-footer {
+      border-top: var(--rule-heavy);
+      padding-top: var(--space-lg);
+      padding-bottom: var(--space-xl);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-md);
+    }
+
+    .footer-brand {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-sm);
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+      border: var(--border-thick);
+      box-shadow: var(--offset-shadow-sm);
+      padding: var(--space-sm) var(--space-md);
+      font-family: var(--font-headline);
+      font-weight: 700;
+    }
+
+    .footer-note {
+      font-size: 0.875rem;
+      color: var(--on-surface-variant);
+      margin: 0;
+    }
+
+    /* Responsive Breakpoints */
+    @media (max-width: 980px) {
+      .masthead {
+        grid-template-columns: 1fr;
+      }
+      .sim-workspace {
+        grid-template-columns: 1fr;
+      }
+      .inspector-grid {
+        grid-template-columns: 1fr;
+      }
+      .band-strip {
+        grid-template-columns: repeat(auto-fit, minmax(135px, 1fr));
+      }
+    }
+
+    @media (max-width: 640px) {
+      .page-grid {
+        padding: var(--space-sm);
+        gap: var(--space-lg);
+      }
+      .canvas-wrap {
+        min-height: 360px;
+        height: 380px;
+      }
+      .toggle-grid, .telemetry-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-grid">
+
+    <!-- MASTHEAD -->
+    <header class="masthead">
+      <div>
+        <span class="kicker">Mô phỏng Vật lí 11 • Chương trình GDPT 2018</span>
+        <h1 class="title">Sóng Điện Từ &amp; <mark>Thang Sóng</mark></h1>
+        <p class="lede">
+          Khám phá trực quan cấu trúc 3D của sóng điện từ với ba vectơ vuông góc từng đôi một
+          ($\vec{E} \perp \vec{B} \perp \vec{v}$) và tương tác trực tiếp trên toàn bộ dải bức xạ điện từ.
+        </p>
+      </div>
+
+      <aside class="brand-plate" aria-label="Thông tin bản quyền">
+        <span class="brand-plate-kicker">
+          <i data-lucide="award" aria-hidden="true"></i>
+          Bản quyền thương hiệu
+        </span>
+        <div class="brand-plate-name">Thầy PGT-THPT La Gi</div>
+        <div class="brand-plate-sub">Học liệu mô phỏng Vật lí tương tác • Ký hiệu chuẩn xác</div>
+      </aside>
+    </header>
+
+    <!-- SECTION 1: 3D ELECTROMAGNETIC WAVE SIMULATOR -->
+    <section aria-labelledby="sec-sim-heading">
+      <div class="section-open accent-blue">
+        <div>
+          <span class="kicker">Phần 01 • Mô hình 3 chiều trực quan</span>
+          <h2 id="sec-sim-heading" class="section-heading">
+            Ba vectơ vuông góc từng đôi một: $\vec{E}$, $\vec{B}$ và $\vec{v}$
+          </h2>
+        </div>
+        <div class="preset-row">
+          <span class="band-tag">Tam diện thuận: $\vec{E} \times \vec{B} \uparrow\uparrow \vec{v}$</span>
+        </div>
+      </div>
+
+      <div class="sim-workspace">
+        <!-- 3D Canvas Stage -->
+        <div class="block stage-card">
+          <div class="stage-toolbar">
+            <div class="cam-group" role="group" aria-label="Chọn góc nhìn 3D">
+              <button type="button" class="btn btn-compact is-active" id="cam-3d" onclick="setCameraPreset('3d')">Phối cảnh 3D</button>
+              <button type="button" class="btn btn-compact" id="cam-ev" onclick="setCameraPreset('ev')">Mặt phẳng E–v</button>
+              <button type="button" class="btn btn-compact" id="cam-bv" onclick="setCameraPreset('bv')">Mặt phẳng B–v</button>
+              <button type="button" class="btn btn-compact" id="cam-yz" onclick="setCameraPreset('yz')">Nhìn dọc v⃗</button>
+            </div>
+            <button type="button" class="btn btn-compact" onclick="resetCamera()">
+              <i data-lucide="rotate-ccw" aria-hidden="true"></i>
+              Đặt lại góc xoay
+            </button>
+          </div>
+
+          <div class="canvas-wrap" id="canvasWrap" title="Kéo chuột hoặc chạm để xoay không gian 3D">
+            <canvas id="emWaveCanvas" aria-label="Mô phỏng 3D sóng điện từ với các vectơ E, B và v vuông góc từng đôi một"></canvas>
+          </div>
+
+          <div class="stage-legend">
+            <div class="vec-badge">
+              <span class="vec-swatch swatch-e" aria-hidden="true"></span>
+              <span><span class="vec-label-e">$\vec{E}$</span> — Cường độ điện trường (trục $Oy$)</span>
+            </div>
+            <div class="vec-badge">
+              <span class="vec-swatch swatch-b" aria-hidden="true"></span>
+              <span><span class="vec-label-b">$\vec{B}$</span> — Cảm ứng từ (trục $Oz$)</span>
+            </div>
+            <div class="vec-badge">
+              <span class="vec-swatch swatch-v" aria-hidden="true"></span>
+              <span><span class="vec-label-v">$\vec{v}$</span> — Tốc độ truyền sóng (trục $Ox$)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Control Deck -->
+        <aside class="block control-deck" aria-label="Bảng điều khiển mô phỏng sóng">
+          <div class="control-group">
+            <p class="group-title">Điều khiển chuyển động</p>
+            <div class="playback-row">
+              <button type="button" class="btn btn-primary" id="btnPlayPause" onclick="togglePlayPause()">
+                <i data-lucide="pause" aria-hidden="true"></i>
+                <span id="playPauseLabel">Tạm dừng</span>
+              </button>
+              <button type="button" class="btn" onclick="stepWave()">
+                <i data-lucide="step-forward" aria-hidden="true"></i>
+                Bước $+T/12$
+              </button>
+              <button type="button" class="btn" onclick="resetSimParams()">
+                Mặc định
+              </button>
+            </div>
+          </div>
+
+          <div class="control-group">
+            <p class="group-title">Hiển thị các thành phần vectơ</p>
+            <div class="toggle-grid">
+              <label class="toggle-pill">
+                <input type="checkbox" id="chkVecE" checked onchange="toggleLayer('showE', this.checked)">
+                <span class="vec-label-e">Vectơ $\vec{E}$</span>
+              </label>
+              <label class="toggle-pill">
+                <input type="checkbox" id="chkVecB" checked onchange="toggleLayer('showB', this.checked)">
+                <span class="vec-label-b">Vectơ $\vec{B}$</span>
+              </label>
+              <label class="toggle-pill">
+                <input type="checkbox" id="chkVecV" checked onchange="toggleLayer('showV', this.checked)">
+                <span class="vec-label-v">Vectơ $\vec{v}$</span>
+              </label>
+              <label class="toggle-pill">
+                <input type="checkbox" id="chkOrtho" checked onchange="toggleLayer('showOrtho', this.checked)">
+                <span>Góc vuông ($\perp$)</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="control-group">
+            <div class="field">
+              <div class="field-header">
+                <label for="sliderProbeX">Điểm khảo sát $x_0$ (theo $\lambda$)</label>
+                <span class="mono-val" id="valProbeX">0.65 $\lambda$</span>
+              </div>
+              <input type="range" id="sliderProbeX" min="0.1" max="1.9" step="0.05" value="0.65" oninput="updateProbeX(this.value)">
+            </div>
+
+            <div class="field">
+              <div class="field-header">
+                <label for="sliderSpeed">Tốc độ mô phỏng</label>
+                <span class="mono-val" id="valSpeed">1.0×</span>
+              </div>
+              <input type="range" id="sliderSpeed" min="0.2" max="2.5" step="0.1" value="1.0" oninput="updateSimSpeed(this.value)">
+            </div>
+
+            <div class="field">
+              <div class="field-header">
+                <label for="sliderAmp">Biên độ hiển thị ($E_0, B_0$)</label>
+                <span class="mono-val" id="valAmp">100%</span>
+              </div>
+              <input type="range" id="sliderAmp" min="40" max="130" step="5" value="100" oninput="updateAmplitude(this.value)">
+            </div>
+
+            <div class="field">
+              <div class="field-header">
+                <label for="sliderMediumN">Chiết suất môi trường $n$</label>
+                <span class="mono-val" id="valMediumN">1.00</span>
+              </div>
+              <input type="range" id="sliderMediumN" min="1.00" max="2.42" step="0.01" value="1.00" oninput="updateMediumN(this.value)">
+              <div class="preset-row">
+                <button type="button" class="chip-btn" onclick="setMediumPreset(1.00)">Chân không (1,00)</button>
+                <button type="button" class="chip-btn" onclick="setMediumPreset(1.33)">Nước (1,33)</button>
+                <button type="button" class="chip-btn" onclick="setMediumPreset(1.50)">Thủy tinh (1,50)</button>
+                <button type="button" class="chip-btn" onclick="setMediumPreset(2.42)">Kim cương (2,42)</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="control-group">
+            <p class="group-title">Thông số tức thời tại $x_0$ &amp; đồng pha</p>
+            <div class="telemetry-grid">
+              <div class="stat-box">
+                <div class="stat-label">Tốc độ truyền $v = c/n$</div>
+                <div class="stat-num" id="readoutV">3,00 × 10⁸ m/s</div>
+              </div>
+              <div class="stat-box">
+                <div class="stat-label">Pha dao động $\varphi$</div>
+                <div class="stat-num" id="readoutPhase">0,00 rad</div>
+              </div>
+            </div>
+
+            <div class="phase-sync-box" aria-live="polite">
+              <div class="meter-row">
+                <span class="vec-label-e">$E / E_0$</span>
+                <div class="meter-track">
+                  <div class="meter-center"></div>
+                  <div class="meter-fill meter-fill-e" id="meterE"></div>
+                </div>
+                <span id="valRatioE">+1,00</span>
+              </div>
+              <div class="meter-row">
+                <span class="vec-label-b">$B / B_0$</span>
+                <div class="meter-track">
+                  <div class="meter-center"></div>
+                  <div class="meter-fill meter-fill-b" id="meterB"></div>
+                </div>
+                <span id="valRatioB">+1,00</span>
+              </div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- SECTION 2: INTERACTIVE ELECTROMAGNETIC SPECTRUM -->
+    <section aria-labelledby="sec-spec-heading">
+      <div class="section-open accent-red">
+        <div>
+          <span class="kicker">Phần 02 • Phân loại theo bước sóng &amp; tần số</span>
+          <h2 id="sec-spec-heading" class="section-heading">
+            Thang sóng điện từ tương tác (7 dải bức xạ)
+          </h2>
+        </div>
+        <div>
+          <span class="band-tag">Liên kết trực tiếp với mô phỏng sóng 3D</span>
+        </div>
+      </div>
+
+      <div class="block spectrum-shell">
+        <div class="spectrum-directions">
+          <span class="dir-tag">← Bước sóng $\lambda$ tăng dần ($\text{m}$)</span>
+          <span class="dir-tag">Tần số $f$ ($\text{Hz}$) &amp; Năng lượng $\varepsilon = hf$ tăng dần →</span>
+        </div>
+
+        <!-- 7 Radiation Band Buttons -->
+        <div class="band-strip" role="group" aria-label="Các dải bức xạ trong thang sóng điện từ">
+          <button type="button" class="band-btn" data-band="radio" onclick="selectBand('radio')">
+            <div class="band-bar-top bar-radio"></div>
+            <div class="band-name">Sóng vô tuyến</div>
+            <div class="band-range">$1\text{ mm} \to 100\text{ km}$</div>
+          </button>
+
+          <button type="button" class="band-btn" data-band="micro" onclick="selectBand('micro')">
+            <div class="band-bar-top bar-micro"></div>
+            <div class="band-name">Sóng vi ba</div>
+            <div class="band-range">$1\text{ mm} \to 1\text{ m}$</div>
+          </button>
+
+          <button type="button" class="band-btn" data-band="ir" onclick="selectBand('ir')">
+            <div class="band-bar-top bar-ir"></div>
+            <div class="band-name">Tia hồng ngoại (IR)</div>
+            <div class="band-range">$760\text{ nm} \to 1\text{ mm}$</div>
+          </button>
+
+          <button type="button" class="band-btn is-active" data-band="vis" onclick="selectBand('vis')">
+            <div class="band-bar-top bar-vis">
+              <span class="vis-seg-red"></span>
+              <span class="vis-seg-orange"></span>
+              <span class="vis-seg-yellow"></span>
+              <span class="vis-seg-green"></span>
+              <span class="vis-seg-cyan"></span>
+              <span class="vis-seg-blue"></span>
+              <span class="vis-seg-violet"></span>
+            </div>
+            <div class="band-name">Ánh sáng nhìn thấy</div>
+            <div class="band-range">$380\text{ nm} \to 760\text{ nm}$</div>
+          </button>
+
+          <button type="button" class="band-btn" data-band="uv" onclick="selectBand('uv')">
+            <div class="band-bar-top bar-uv"></div>
+            <div class="band-name">Tia tử ngoại (UV)</div>
+            <div class="band-range">$10\text{ nm} \to 380\text{ nm}$</div>
+          </button>
+
+          <button type="button" class="band-btn" data-band="xray" onclick="selectBand('xray')">
+            <div class="band-bar-top bar-xray"></div>
+            <div class="band-name">Tia X (Rơn-ghen)</div>
+            <div class="band-range">$10^{-11} \to 10^{-8}\text{ m}$</div>
+          </button>
+
+          <button type="button" class="band-btn" data-band="gamma" onclick="selectBand('gamma')">
+            <div class="band-bar-top bar-gamma"></div>
+            <div class="band-name">Tia Gamma ($\gamma$)</div>
+            <div class="band-range">$&lt; 10^{-11}\text{ m}$</div>
+          </button>
+        </div>
+
+        <!-- Logarithmic Scrubber -->
+        <div class="scrubber-panel">
+          <div class="field">
+            <div class="field-header">
+              <label for="sliderLogLambda">Thanh trượt bước sóng chân không $\lambda_0$ (thang lôgarit từ $10^4\text{ m}$ đến $10^{-14}\text{ m}$)</label>
+              <span class="mono-val" id="valLambdaReadable">550 nm</span>
+            </div>
+            <input type="range" id="sliderLogLambda" min="-4" max="14" step="0.02" value="6.26" oninput="updateFromLogScrubber(this.value)">
+            <div class="tick-ruler" aria-hidden="true">
+              <span>$10^{4}\text{ m}$</span>
+              <span>$1\text{ m}$</span>
+              <span>$10^{-3}\text{ m}$</span>
+              <span>$10^{-6}\text{ m}$</span>
+              <span>$10^{-9}\text{ m}$</span>
+              <span>$10^{-12}\text{ m}$</span>
+              <span>$10^{-14}\text{ m}$</span>
+            </div>
+          </div>
+
+          <div class="live-spectrum-metrics">
+            <div class="stat-box">
+              <div class="stat-label">Bước sóng trong chân không ($\lambda_0$)</div>
+              <div class="stat-num" id="specLambda0">5,50 × 10⁻⁷ m</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-label">Bước sóng trong môi trường ($\lambda = \lambda_0 / n$)</div>
+              <div class="stat-num" id="specLambdaMed">5,50 × 10⁻⁷ m</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-label">Tần số sóng ($f = c / \lambda_0$)</div>
+              <div class="stat-num" id="specFreq">5,45 × 10¹⁴ Hz</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-label">Năng lượng photon ($\varepsilon = hf$)</div>
+              <div class="stat-num" id="specEnergy">2,25 eV</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Detailed Inspector for Selected Band -->
+        <div class="inspector-grid">
+          <div class="inspector-summary">
+            <div class="inspector-title-row">
+              <h3 class="inspector-title" id="inspTitle">Ánh sáng nhìn thấy</h3>
+              <span class="band-tag" id="inspTag">380 nm – 760 nm</span>
+            </div>
+
+            <table class="spec-table">
+              <tbody>
+                <tr>
+                  <th>Khoảng bước sóng</th>
+                  <td id="inspLambdaRange">380 nm – 760 nm</td>
+                </tr>
+                <tr>
+                  <th>Khoảng tần số</th>
+                  <td id="inspFreqRange">3,95 × 10¹⁴ – 7,89 × 10¹⁴ Hz</td>
+                </tr>
+                <tr>
+                  <th>Năng lượng photon</th>
+                  <td id="inspEnergyRange">1,63 eV – 3,26 eV</td>
+                </tr>
+                <tr>
+                  <th>Khí quyển Trái Đất</th>
+                  <td id="inspAtmosphere">Truyền qua tốt (cửa sổ quang học)</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <!-- Visible light quick color picks (shown when visible band is active or accessible) -->
+            <div class="vis-subbar" id="visSubbar">
+              <div class="stat-label">Chọn nhanh màu quang phổ ánh sáng nhìn thấy:</div>
+              <div class="vis-colors">
+                <button type="button" class="vis-color-btn vis-seg-red" onclick="setWavelengthMeters(700e-9)">Đỏ</button>
+                <button type="button" class="vis-color-btn vis-seg-orange" onclick="setWavelengthMeters(610e-9)">Cam</button>
+                <button type="button" class="vis-color-btn vis-seg-yellow text-dark" onclick="setWavelengthMeters(580e-9)">Vàng</button>
+                <button type="button" class="vis-color-btn vis-seg-green" onclick="setWavelengthMeters(532e-9)">Lục</button>
+                <button type="button" class="vis-color-btn vis-seg-cyan" onclick="setWavelengthMeters(490e-9)">Lam</button>
+                <button type="button" class="vis-color-btn vis-seg-blue" onclick="setWavelengthMeters(450e-9)">Chàm</button>
+                <button type="button" class="vis-color-btn vis-seg-violet" onclick="setWavelengthMeters(405e-9)">Tím</button>
+              </div>
+            </div>
+
+            <!-- Scale Comparison -->
+            <div class="scale-compare-box">
+              <div class="scale-svg-box" id="scaleSvgBox" aria-hidden="true"></div>
+              <div>
+                <div class="stat-label">So sánh kích thước bước sóng</div>
+                <strong id="inspScaleName">Tế bào đơn bào &amp; vi khuẩn (~500 nm)</strong>
+                <div id="inspScaleDesc" style="font-size: 0.85rem; color: var(--on-surface-variant);">
+                  Tương đương kích thước của vi-rút lớn hoặc bào quan trong tế bào.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="inspector-details">
+            <div class="detail-block">
+              <h4>Nguồn phát phổ biến</h4>
+              <p id="inspSources"></p>
+            </div>
+            <div class="detail-block">
+              <h4>Tính chất vật lí nổi bật</h4>
+              <ul id="inspProps"></ul>
+            </div>
+            <div class="detail-block">
+              <h4>Ứng dụng trong đời sống &amp; khoa học</h4>
+              <ul id="inspApps"></ul>
+            </div>
+            <div class="detail-block">
+              <h4>Mẫu thử nhanh (Presets)</h4>
+              <div class="preset-row" id="inspPresets"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 3: CORE PHYSICS SYNTHESIS & INTERACTIVE CHECK -->
+    <section aria-labelledby="sec-theory-heading">
+      <div class="section-open accent-yellow">
+        <div>
+          <span class="kicker">Phần 03 • Kiến thức cốt lõi &amp; Luyện tập</span>
+          <h2 id="sec-theory-heading" class="section-heading">
+            Hệ thức sóng điện từ &amp; Kiểm tra nhanh
+          </h2>
+        </div>
+      </div>
+
+      <div class="principles-grid">
+        <article class="block principle-card">
+          <h3>1. Tính chất sóng ngang &amp; Tam diện thuận</h3>
+          <p>
+            Sóng điện từ là sóng ngang: vectơ cường độ điện trường $\vec{E}$ và vectơ cảm ứng từ $\vec{B}$
+            luôn vuông góc với nhau và vuông góc với vectơ vận tốc truyền sóng $\vec{v}$.
+          </p>
+          <div class="formula-strip">
+            $\vec{E} \perp \vec{B} \perp \vec{v}$
+          </div>
+        </article>
+
+        <article class="block principle-card featured">
+          <h3>2. Điện trường và từ trường luôn cùng pha</h3>
+          <p>
+            Tại mọi điểm trên phương truyền sóng, $\vec{E}$ và $\vec{B}$ biến thiên điều hoà
+            <strong>cùng tần số</strong> và <strong>cùng pha</strong> theo thời gian và không gian.
+          </p>
+          <div class="formula-strip">
+            $E = E_0 \cos\left(\omega t - \dfrac{2\pi x}{\lambda}\right), \quad \dfrac{E}{E_0} = \dfrac{B}{B_0}$
+          </div>
+        </article>
+
+        <article class="block principle-card">
+          <h3>3. Tốc độ truyền &amp; Năng lượng photon</h3>
+          <p>
+            Trong chân không, mọi sóng điện từ truyền với tốc độ $c \approx 3 \times 10^8\text{ m/s}$.
+            Khi truyền vào môi trường chiết suất $n$, tần số $f$ không đổi, bước sóng giảm $n$ lần.
+          </p>
+          <div class="formula-strip">
+            $\lambda_0 = \dfrac{c}{f}; \quad v = \dfrac{c}{n}; \quad \varepsilon = hf = \dfrac{hc}{\lambda_0}$
+          </div>
+        </article>
+      </div>
+
+      <!-- Mini Interactive Quiz -->
+      <div class="block quiz-block">
+        <div class="quiz-header">
+          <div>
+            <span class="kicker">Kiểm tra tương tác</span>
+            <h3 style="margin: var(--space-xs) 0 0 0; font-family: var(--font-headline);" id="quizQuestion">
+              Câu hỏi 1/4: Đang tải...
+            </h3>
+          </div>
+          <div class="preset-row">
+            <span class="mono-val" id="quizScoreBadge">Điểm: 0/4</span>
+            <button type="button" class="btn btn-compact" onclick="nextQuizQuestion()">Câu tiếp theo</button>
+            <button type="button" class="btn btn-compact" onclick="resetQuiz()">Làm lại</button>
+          </div>
+        </div>
+
+        <div class="quiz-options" id="quizOptions"></div>
+        <div class="quiz-feedback" id="quizFeedback" aria-live="polite">
+          Chọn một đáp án để kiểm tra kiến thức về vectơ sóng điện từ và thang sóng điện từ.
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="site-footer">
+      <div class="footer-brand">
+        <i data-lucide="shield-check" aria-hidden="true"></i>
+        <span>© Bản quyền: Thầy PGT-THPT La Gi</span>
+      </div>
+      <p class="footer-note">
+        Học liệu mô phỏng tương tác Vật lí 11 (Kết nối tri thức với cuộc sống) • Tất cả đại lượng và ký hiệu vectơ được chuẩn hoá theo đơn vị SI.
+      </p>
+    </footer>
+  </div>
+
+  <api-shim></api-shim>
+
+  <script>
+    // =========================================================================
+    // 1. CONSTANTS & CSS TOKEN COLORS (No raw hex literals needed in logic)
+    // =========================================================================
+    const C_VACUUM = 299792458; // m/s
+    const H_PLANCK = 6.62607015e-34; // J.s
+    const E_CHARGE = 1.602176634e-19; // J per eV
+
+    function readCssVar(name, fallback) {
+      const val = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+      return val || fallback;
+    }
+
+    let THEME = {
+      bg: '#ffffff',
+      ink: '#1a1a1a',
+      muted: '#4a4a4a',
+      grid: '#d0cbc3',
+      vecE: '#e63b2e',
+      vecEText: '#b81d13',
+      vecEFill: 'rgba(230, 59, 46, 0.14)',
+      vecB: '#0055ff',
+      vecBText: '#0044cc',
+      vecBFill: 'rgba(0, 85, 255, 0.14)',
+      vecV: '#0f766e',
+      vecVText: '#0f766e',
+      probe: '#ffcc00',
+      visRed: '#dc2626',
+      visOrange: '#ea580c',
+      visYellow: '#eab308',
+      visGreen: '#16a34a',
+      visCyan: '#0891b2',
+      visBlue: '#2563eb',
+      visViolet: '#7c3aed'
+    };
+
+    function refreshThemeTokens() {
+      THEME = {
+        bg: readCssVar('--stage-bg', THEME.bg),
+        ink: readCssVar('--on-surface', THEME.ink),
+        muted: readCssVar('--on-surface-variant', THEME.muted),
+        grid: readCssVar('--outline-variant', THEME.grid),
+        vecE: readCssVar('--vec-e', THEME.vecE),
+        vecEText: readCssVar('--vec-e-text', THEME.vecEText),
+        vecEFill: readCssVar('--vec-e-fill', THEME.vecEFill),
+        vecB: readCssVar('--vec-b', THEME.vecB),
+        vecBText: readCssVar('--vec-b-text', THEME.vecBText),
+        vecBFill: readCssVar('--vec-b-fill', THEME.vecBFill),
+        vecV: readCssVar('--vec-v', THEME.vecV),
+        vecVText: readCssVar('--vec-v-text', THEME.vecVText),
+        probe: readCssVar('--probe-accent', THEME.probe),
+        visRed: readCssVar('--vis-red', THEME.visRed),
+        visOrange: readCssVar('--vis-orange', THEME.visOrange),
+        visYellow: readCssVar('--vis-yellow', THEME.visYellow),
+        visGreen: readCssVar('--vis-green', THEME.visGreen),
+        visCyan: readCssVar('--vis-cyan', THEME.visCyan),
+        visBlue: readCssVar('--vis-blue', THEME.visBlue),
+        visViolet: readCssVar('--vis-violet', THEME.visViolet)
+      };
+    }
+
+    // =========================================================================
+    // 2. ELECTROMAGNETIC SPECTRUM DATA (Vật lí 11 KNTT)
+    // =========================================================================
+    const BANDS = [
+      {
+        id: 'radio',
+        name: `Sóng vô tuyến`,
+        tag: `1 mm – 100 km`,
+        defaultLambda: 3.0,
+        minLambda: 1e-3,
+        maxLambda: 1e5,
+        lambdaRangeText: `1 mm – 100 km`,
+        freqRangeText: `3 kHz – 300 GHz`,
+        energyRangeText: `1,24 × 10⁻¹¹ – 1,24 × 10⁻³ eV`,
+        atmosphere: `Sóng ngắn phản xạ tầng điện li; sóng cực ngắn xuyên qua khí quyển.`,
+        scaleName: `Từ đầu kim (mm) tới tòa nhà, ngọn núi (km)`,
+        scaleDesc: `Bước sóng rất dài, dễ nhiễu xạ qua vật cản lớn như đồi núi, nhà cao tầng.`,
+        scaleIcon: `tower`,
+        sources: `Mạch dao động LC, an-ten phát sóng vô tuyến, các thiên thể vô tuyến trong vũ trụ.`,
+        props: [
+          `Dễ truyền đi xa trên mặt đất và vòng qua chướng ngại vật nhờ hiện tượng nhiễu xạ.`,
+          `Sóng ngắn phản xạ tốt trên tầng điện li và mặt đất giúp thông tin liên lạc toàn cầu.`,
+          `Không gây ion hoá vật chất.`
+        ],
+        apps: [
+          `Phát thanh (AM, FM), truyền hình mặt đất.`,
+          `Thông tin liên lạc hàng hải, hàng không, bộ đàm.`,
+          `Kính thiên văn vô tuyến nghiên cứu vũ trụ.`
+        ],
+        presets: [
+          { label: `AM (1 MHz)`, lambda: 300 },
+          { label: `FM (100 MHz)`, lambda: 3 },
+          { label: `Sóng ngắn (10 MHz)`, lambda: 30 }
+        ]
+      },
+      {
+        id: 'micro',
+        name: `Sóng vi ba (Vi sóng)`,
+        tag: `1 mm – 1 m`,
+        defaultLambda: 0.122,
+        minLambda: 1e-3,
+        maxLambda: 1.0,
+        lambdaRangeText: `1 mm – 1 m`,
+        freqRangeText: `300 MHz – 300 GHz`,
+        energyRangeText: `1,24 µeV – 1,24 meV`,
+        atmosphere: `Truyền thẳng xuyên qua tầng điện li để liên lạc vệ tinh.`,
+        scaleName: `Cỡ hạt đậu đến quả bóng đá (mm – cm)`,
+        scaleDesc: `Bước sóng ngắn giúp hội tụ thành chùm hẹp bằng chảo parabol.`,
+        scaleIcon: `dish`,
+        sources: `Đèn manhêtrôn (trong lò vi sóng), bộ phát Wi-Fi/5G, ra-đa xung, bức xạ nền vũ trụ.`,
+        props: [
+          `Truyền thẳng, không bị phản xạ bởi tầng điện li.`,
+          `Bị nước, đường và chất béo hấp thụ mạnh chuyển hoá thành nhiệt năng (tần số ~2,45 GHz).`,
+          `Có thể định hướng chính xác bằng chảo thu phát.`
+        ],
+        apps: [
+          `Thông tin vệ tinh, định vị toàn cầu (GPS), mạng Wi-Fi, 4G/5G.`,
+          `Hệ thống ra-đa dẫn đường hàng không, dự báo thời tiết.`,
+          `Lò vi sóng làm nóng thức ăn nhanh chóng.`
+        ],
+        presets: [
+          { label: `Lò vi sóng (2,45 GHz)`, lambda: 0.1224 },
+          { label: `Wi-Fi 5 GHz`, lambda: 0.06 },
+          { label: `Ra-đa (10 GHz)`, lambda: 0.03 }
+        ]
+      },
+      {
+        id: 'ir',
+        name: `Tia hồng ngoại (IR)`,
+        tag: `760 nm – 1 mm`,
+        defaultLambda: 1.0e-5,
+        minLambda: 7.6e-7,
+        maxLambda: 1e-3,
+        lambdaRangeText: `760 nm – 1 mm`,
+        freqRangeText: `3 × 10¹¹ – 3,95 × 10¹⁴ Hz`,
+        energyRangeText: `1,24 meV – 1,63 eV`,
+        atmosphere: `Hơi nước và khí CO₂ hấp thụ một phần (gây hiệu ứng nhà kính).`,
+        scaleName: `Độ dày sợi tóc đến kích thước tế bào (~10 µm)`,
+        scaleDesc: `Mắt người không nhìn thấy nhưng da cảm nhận được dưới dạng hơi ấm.`,
+        scaleIcon: `thermo`,
+        sources: `Mọi vật có nhiệt độ lớn hơn 0 K đều phát tia hồng ngoại (cơ thể người, bếp than, đèn hồng ngoại, Mặt Trời).`,
+        props: [
+          `Tác dụng nổi bật nhất là tác dụng nhiệt (sưởi ấm, sấy khô).`,
+          `Gây ra một số phản ứng hoá học và tác dụng lên phim ảnh hồng ngoại.`,
+          `Có thể biến điệu như sóng điện từ cao tần để truyền tín hiệu tầm gần.`
+        ],
+        apps: [
+          `Điều khiển từ xa (remote TV, điều hoà).`,
+          `Camera nhiệt, ống nhòm nhìn đêm, đo thân nhiệt không tiếp xúc.`,
+          `Sấy khô nông sản, sơn ô tô; vật lí trị liệu.`
+        ],
+        presets: [
+          { label: `Remote TV (940 nm)`, lambda: 940e-9 },
+          { label: `Nhiệt cơ thể (9,5 µm)`, lambda: 9.5e-6 },
+          { label: `Hồng ngoại xa (50 µm)`, lambda: 50e-6 }
+        ]
+      },
+      {
+        id: 'vis',
+        name: `Ánh sáng nhìn thấy`,
+        tag: `380 nm – 760 nm`,
+        defaultLambda: 550e-9,
+        minLambda: 3.8e-7,
+        maxLambda: 7.6e-7,
+        lambdaRangeText: `380 nm – 760 nm`,
+        freqRangeText: `3,95 × 10¹⁴ – 7,89 × 10¹⁴ Hz`,
+        energyRangeText: `1,63 eV – 3,26 eV`,
+        atmosphere: `Truyền qua khí quyển rất tốt (cửa sổ quang học).`,
+        scaleName: `Kích thước vi khuẩn, bào quan tế bào (~0,5 µm)`,
+        scaleDesc: `Dải bức xạ duy nhất kích thích trực tiếp tế bào nón và tế bào que của mắt người.`,
+        scaleIcon: `eye`,
+        sources: `Mặt Trời, đèn sợi đốt, đèn LED, tia laser, ngọn lửa, đom đóm.`,
+        props: [
+          `Gồm dải màu liên tục từ Đỏ (760 nm) đến Tím (380 nm).`,
+          `Tuân theo các định luật phản xạ, khúc xạ, giao thoa, nhiễu xạ và tán sắc.`,
+          `Kích thích quang hợp ở thực vật và thị giác ở động vật.`
+        ],
+        apps: [
+          `Chiếu sáng, quan sát tự nhiên, nhiếp ảnh và kính hiển vi quang học.`,
+          `Truyền dữ liệu tốc độ cao qua cáp quang.`,
+          `Công nghệ Laser trong y học, đo đạc và công nghiệp.`
+        ],
+        presets: [
+          { label: `Laser Đỏ (650 nm)`, lambda: 650e-9 },
+          { label: `Laser Lục (532 nm)`, lambda: 532e-9 },
+          { label: `Ánh sáng Lam (460 nm)`, lambda: 460e-9 }
+        ]
+      },
+      {
+        id: 'uv',
+        name: `Tia tử ngoại (UV)`,
+        tag: `10 nm – 380 nm`,
+        defaultLambda: 2.5e-7,
+        minLambda: 1e-8,
+        maxLambda: 3.8e-7,
+        lambdaRangeText: `10 nm – 380 nm`,
+        freqRangeText: `7,89 × 10¹⁴ – 3 × 10¹⁶ Hz`,
+        energyRangeText: `3,26 eV – 124 eV`,
+        atmosphere: `Tầng Ozon (O₃) hấp thụ phần lớn tia UV có bước sóng ngắn nguy hiểm.`,
+        scaleName: `Cỡ phân tử hữu cơ và vi-rút (10 – 380 nm)`,
+        scaleDesc: `Năng lượng photon đủ lớn để kích thích phản ứng quang hoá và ion hoá nhẹ.`,
+        scaleIcon: `sun`,
+        sources: `Các vật có nhiệt độ rất cao trên 2000 °C: Mặt Trời, hồ quang điện, đèn hơi thủy ngân.`,
+        props: [
+          `Tác dụng mạnh lên phim ảnh; kích thích sự phát quang nhiều chất.`,
+          `Gây ion hoá không khí và nhiều phản ứng quang hoá, tổng hợp vitamin D.`,
+          `Tác dụng sinh học: diệt khuẩn, diệt nấm mốc; nhưng gây bỏng da, hại mắt nếu tiếp xúc quá mức.`
+        ],
+        apps: [
+          `Tiệt trùng dụng cụ y tế, khử khuẩn nước uống và không khí.`,
+          `Soi phát hiện tiền giả, dấu vết huỳnh quang trong pháp y.`,
+          `Tìm vết nứt bề mặt kim loại bằng chất lỏng phát quang.`
+        ],
+        presets: [
+          { label: `UV-A (365 nm)`, lambda: 365e-9 },
+          { label: `UV-C diệt khuẩn (254 nm)`, lambda: 254e-9 },
+          { label: `UV xa (100 nm)`, lambda: 100e-9 }
+        ]
+      },
+      {
+        id: 'xray',
+        name: `Tia X (Tia Rơn-ghen)`,
+        tag: `10⁻¹¹ m – 10⁻⁸ m`,
+        defaultLambda: 1.0e-10,
+        minLambda: 1e-11,
+        maxLambda: 1e-8,
+        lambdaRangeText: `0,01 nm – 10 nm`,
+        freqRangeText: `3 × 10¹⁶ – 3 × 10¹⁹ Hz`,
+        energyRangeText: `124 eV – 124 keV`,
+        atmosphere: `Bị khí quyển Trái Đất hấp thụ hoàn toàn (cần vệ tinh để quan sát thiên văn tia X).`,
+        scaleName: `Cỡ nguyên tử (0,1 nm = 1 Å)`,
+        scaleDesc: `Bước sóng ngang bằng khoảng cách giữa các nguyên tử trong tinh thể.`,
+        scaleIcon: `atom`,
+        sources: `Ống Rơn-ghen (chùm electron tốc độ cao đập vào đối catôt bằng kim loại nặng có nguyên tử lượng lớn).`,
+        props: [
+          `Tính chất nổi bật: khả năng đâm xuyên mạnh qua mô mềm, gỗ, giấy; bị xương và chì (Pb) cản mạnh.`,
+          `Làm đen kính ảnh, làm phát quang một số chất, ion hoá mạnh chất khí.`,
+          `Tác dụng sinh lí mạnh: huỷ diệt tế bào, cần che chắn cẩn thận.`
+        ],
+        apps: [
+          `Chẩn đoán hình ảnh y khoa (chụp X-quang xương, phổi, chụp CT).`,
+          `Kiểm tra hành lí tại sân bay, kiểm tra khuyết tật bên trong vật đúc.`,
+          `Nghiên cứu cấu trúc tinh thể (nhiễu xạ tia X).`
+        ],
+        presets: [
+          { label: `Chụp X-quang (0,1 nm)`, lambda: 1e-10 },
+          { label: `Tia X mềm (2 nm)`, lambda: 2e-9 },
+          { label: `Tia X cứng (0,02 nm)`, lambda: 2e-11 }
+        ]
+      },
+      {
+        id: 'gamma',
+        name: `Tia Gamma (γ)`,
+        tag: `< 10⁻¹¹ m`,
+        defaultLambda: 1.0e-12,
+        minLambda: 1e-14,
+        maxLambda: 1e-11,
+        lambdaRangeText: `< 0,01 nm (< 10⁻¹¹ m)`,
+        freqRangeText: `> 3 × 10¹⁹ Hz`,
+        energyRangeText: `> 124 keV (tới hàng MeV)`,
+        atmosphere: `Bị khí quyển Trái Đất hấp thụ hoàn toàn.`,
+        scaleName: `Cỡ hạt nhân nguyên tử (~10⁻¹⁴ – 10⁻¹² m)`,
+        scaleDesc: `Có bước sóng ngắn nhất, tần số và năng lượng lớn nhất trong thang sóng điện từ.`,
+        scaleIcon: `gamma`,
+        sources: `Phóng xạ hạt nhân (Co-60, Cs-137…), phản ứng hạt nhân, các vụ nổ siêu tân tinh, lỗ đen.`,
+        props: [
+          `Khả năng đâm xuyên mạnh nhất trong các loại tia (cần lớp chì rất dày hoặc bê tông để che chắn).`,
+          `Không bị lệch trong điện trường và từ trường vì là sóng điện từ không mang điện.`,
+          `Khả năng ion hoá và huỷ diệt tế bào rất cao.`
+        ],
+        apps: [
+          `Xạ trị tiêu diệt khối u ung thư (dao gamma).`,
+          `Tiệt trùng dụng cụ phẫu thuật và bảo quản thực phẩm.`,
+          `Đo độ dày vật liệu, phát hiện khuyết tật trong công nghiệp nặng.`
+        ],
+        presets: [
+          { label: `Nguồn Co-60 (1 pm)`, lambda: 1e-12 },
+          { label: `Năng lượng cao (0,1 pm)`, lambda: 1e-13 },
+          { label: `Vũ trụ cực hạn (0,01 pm)`, lambda: 1e-14 }
+        ]
+      }
+    ];
+
+    // =========================================================================
+    // 3. APPLICATION STATE (Persisted via notebookAppApi)
+    // =========================================================================
+    const DEFAULT_STATE = {
+      isPlaying: true,
+      phase: 0.4,
+      speed: 1.0,
+      ampPercent: 100,
+      mediumN: 1.0,
+      probeXNorm: 0.65, // in wavelengths (0.1 .. 1.9)
+      showE: true,
+      showB: true,
+      showV: true,
+      showOrtho: true,
+      camPreset: '3d',
+      yaw: -0.46,
+      pitch: 0.34,
+      activeBandId: 'vis',
+      lambdaMeters: 550e-9,
+      quizIndex: 0,
+      quizScore: 0,
+      quizAnswered: {}
+    };
+
+    let appState = { ...DEFAULT_STATE };
+    let animFrameId = null;
+    let lastTickTime = performance.now();
+    let isDraggingCanvas = false;
+    let dragStart = { x: 0, y: 0, yaw: 0, pitch: 0 };
+    let saveTimer = null;
+
+    function persistStateSoon() {
+      if (saveTimer) clearTimeout(saveTimer);
+      saveTimer = setTimeout(async function () {
+        if (window.notebookAppApi && typeof window.notebookAppApi.setAppState === 'function') {
+          try {
+            await window.notebookAppApi.setAppState({
+              speed: appState.speed,
+              ampPercent: appState.ampPercent,
+              mediumN: appState.mediumN,
+              probeXNorm: appState.probeXNorm,
+              showE: appState.showE,
+              showB: appState.showB,
+              showV: appState.showV,
+              showOrtho: appState.showOrtho,
+              camPreset: appState.camPreset,
+              yaw: appState.yaw,
+              pitch: appState.pitch,
+              activeBandId: appState.activeBandId,
+              lambdaMeters: appState.lambdaMeters,
+              quizIndex: appState.quizIndex,
+              quizScore: appState.quizScore,
+              quizAnswered: appState.quizAnswered
+            });
+          } catch (err) {
+            // Bỏ qua lỗi lưu trữ tạm thời trong sandbox
+          }
+        }
+      }, 220);
+    }
+
+    // =========================================================================
+    // 4. 3D PROJECTION & BULLETPROOF VECTOR ARROW / MATH SYMBOL RENDERER
+    // =========================================================================
+    function project3D(x, y, z, cx, cy, scalePx) {
+      const cosY = Math.cos(appState.yaw);
+      const sinY = Math.sin(appState.yaw);
+      const cosP = Math.cos(appState.pitch);
+      const sinP = Math.sin(appState.pitch);
+
+      // Rotate around Y (yaw)
+      const x1 = x * cosY - z * sinY;
+      const z1 = x * sinY + z * cosY;
+
+      // Rotate around X (pitch)
+      const y2 = y * cosP - z1 * sinP;
+      const z2 = y * sinP + z1 * cosP;
+
+      // Subtle perspective so depth cues stay natural without distorting perpendiculars
+      const focal = 4.6;
+      const persp = focal / Math.max(1.5, focal - z2 * 0.42);
+
+      return {
+        sx: cx + x1 * scalePx * persp,
+        sy: cy - y2 * scalePx * persp,
+        depth: z2,
+        persp: persp
+      };
+    }
+
+    /**
+     * Vẽ mũi tên 2D chuẩn xác (từ điểm p0 tới p1 trên màn hình)
+     * Đảm bảo đầu mũi tên không bao giờ bị đảo ngược hoặc biến dạng khi vectơ ngắn.
+     */
+    function drawCrispArrow2D(ctx, x0, y0, x1, y1, color, lineWidth, headLen, haloColor) {
+      const dx = x1 - x0;
+      const dy = y1 - y0;
+      const len = Math.hypot(dx, dy);
+      if (len < 3) return;
+
+      const ux = dx / len;
+      const uy = dy / len;
+      const nx = -uy;
+      const ny = ux;
+
+      // Thu nhỏ đầu mũi tên mượt mà nếu vectơ rất ngắn gần nút sóng
+      const actualHead = Math.min(headLen, len * 0.46);
+      const halfWidth = actualHead * 0.42;
+      const shaftEndX = x1 - ux * (actualHead * 0.72);
+      const shaftEndY = y1 - uy * (actualHead * 0.72);
+
+      ctx.save();
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+
+      if (haloColor) {
+        ctx.strokeStyle = haloColor;
+        ctx.lineWidth = lineWidth + 3;
+        ctx.beginPath();
+        ctx.moveTo(x0, y0);
+        ctx.lineTo(shaftEndX, shaftEndY);
+        ctx.stroke();
+      }
+
+      ctx.strokeStyle = color;
+      ctx.lineWidth = lineWidth;
+      ctx.beginPath();
+      ctx.moveTo(x0, y0);
+      ctx.lineTo(shaftEndX, shaftEndY);
+      ctx.stroke();
+
+      // Đầu mũi tên tam giác sắc nét
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      ctx.moveTo(x1, y1);
+      ctx.lineTo(x1 - ux * actualHead + nx * halfWidth, y1 - uy * actualHead + ny * halfWidth);
+      ctx.lineTo(x1 - ux * actualHead - nx * halfWidth, y1 - uy * actualHead - ny * halfWidth);
+      ctx.closePath();
+      ctx.fill();
+
+      if (haloColor) {
+        ctx.strokeStyle = haloColor;
+        ctx.lineWidth = 1.2;
+        ctx.stroke();
+      }
+      ctx.restore();
+    }
+
+    /**
+     * Vẽ ký hiệu vectơ toán học (E⃗, B⃗, v⃗) trực tiếp bằng hình học Canvas,
+     * tuyệt đối KHÔNG dùng ký tự Unicode ghép dễ lỗi font.
+     */
+    function drawVectorSymbolBadge(ctx, letter, subLabel, cx, cy, borderColor, textColor, bgColor) {
+      ctx.save();
+      ctx.font = 'italic 700 17px "Times New Roman", Georgia, serif';
+      const letterWidth = ctx.measureText(letter).width;
+
+      let subWidth = 0;
+      if (subLabel) {
+        ctx.font = '700 11px "JetBrains Mono", monospace';
+        subWidth = ctx.measureText(subLabel).width + 3;
+      }
+
+      const padX = 8;
+      const boxW = Math.max(28, letterWidth + subWidth + padX * 2);
+      const boxH = 30;
+      const left = cx - boxW / 2;
+      const top = cy - boxH / 2;
+
+      // Bauhaus hard offset shadow mini
+      ctx.fillStyle = THEME.ink;
+      ctx.fillRect(left + 2, top + 2, boxW, boxH);
+
+      // Pill / Box fill
+      ctx.fillStyle = bgColor || THEME.bg;
+      ctx.fillRect(left, top, boxW, boxH);
+      ctx.strokeStyle = borderColor;
+      ctx.lineWidth = 2;
+      ctx.strokeRect(left, top, boxW, boxH);
+
+      // Chữ cái vectơ (nghiêng chuẩn ký hiệu vật lí)
+      const letterX = left + padX;
+      const letterY = top + 23;
+      ctx.fillStyle = textColor;
+      ctx.font = 'italic 700 17px "Times New Roman", Georgia, serif';
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'alphabetic';
+      ctx.fillText(letter, letterX, letterY);
+
+      // Mũi tên vectơ (→) vẽ bằng nét chuẩn ngay phía trên đỉnh chữ cái
+      const arrowY = top + 7;
+      const arrowLeft = letterX - 1;
+      const arrowRight = letterX + letterWidth + 2;
+      ctx.strokeStyle = textColor;
+      ctx.fillStyle = textColor;
+      ctx.lineWidth = 1.7;
+      ctx.beginPath();
+      ctx.moveTo(arrowLeft, arrowY);
+      ctx.lineTo(arrowRight - 2, arrowY);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(arrowRight + 1, arrowY);
+      ctx.lineTo(arrowRight - 3.5, arrowY - 2.6);
+      ctx.lineTo(arrowRight - 3.5, arrowY + 2.6);
+      ctx.closePath();
+      ctx.fill();
+
+      // Chỉ số phụ hoặc chú thích ngắn (nếu có)
+      if (subLabel) {
+        ctx.font = '700 11px "JetBrains Mono", monospace';
+        ctx.fillStyle = THEME.ink;
+        ctx.fillText(subLabel, letterX + letterWidth + 3, letterY - 1);
+      }
+
+      ctx.restore();
+    }
+
+    /**
+     * Vẽ ký hiệu góc vuông 3D giữa 2 hướng đơn vị d1 và d2 tại điểm origin3D
+     */
+    function drawRightAngle3D(ctx, origin3D, d1, d2, size, cx, cy, scalePx, strokeColor) {
+      const p0 = project3D(origin3D.x, origin3D.y, origin3D.z, cx, cy, scalePx);
+      const p1 = project3D(origin3D.x + d1.x * size, origin3D.y + d1.y * size, origin3D.z + d1.z * size, cx, cy, scalePx);
+      const p2 = project3D(
+        origin3D.x + (d1.x + d2.x) * size,
+        origin3D.y + (d1.y + d2.y) * size,
+        origin3D.z + (d1.z + d2.z) * size,
+        cx, cy, scalePx
+      );
+      const p3 = project3D(origin3D.x + d2.x * size, origin3D.y + d2.y * size, origin3D.z + d2.z * size, cx, cy, scalePx);
+
+      ctx.save();
+      ctx.fillStyle = 'rgba(255, 204, 0, 0.28)';
+      ctx.beginPath();
+      ctx.moveTo(p0.sx, p0.sy);
+      ctx.lineTo(p1.sx, p1.sy);
+      ctx.lineTo(p2.sx, p2.sy);
+      ctx.lineTo(p3.sx, p3.sy);
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.strokeStyle = strokeColor || THEME.ink;
+      ctx.lineWidth = 1.6;
+      ctx.beginPath();
+      ctx.moveTo(p1.sx, p1.sy);
+      ctx.lineTo(p2.sx, p2.sy);
+      ctx.lineTo(p3.sx, p3.sy);
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    // Tính toán mật độ sóng hiển thị dựa trên bước sóng & chiết suất (vẫn giữ rõ nét trực quan)
+    function getWaveVisualFrequency() {
+      // Ánh xạ dải log10(lambda0) từ +4 (sóng dài) -> -14 (gamma) thành số chu kì trên khung (1.4 -> 3.6 chu kì)
+      const logL = Math.log10(Math.max(1e-15, appState.lambdaMeters));
+      // logL in [-14, 4]: t = 0 ở sóng dài, 1 ở gamma
+      const t = Math.min(1, Math.max(0, (4 - logL) / 18));
+      const baseCycles = 1.45 + t * 1.9;
+      // Chiết suất n làm bước sóng giảm -> mật độ chu kì tăng nhẹ
+      return baseCycles * (0.85 + 0.15 * appState.mediumN);
+    }
+
+    function getVisibleAccentColor(lambdaMeters) {
+      if (lambdaMeters >= 3.8e-7 && lambdaMeters <= 7.6e-7) {
+        const nm = lambdaMeters * 1e9;
+        if (nm >= 620) return THEME.visRed;
+        if (nm >= 590) return THEME.visOrange;
+        if (nm >= 565) return THEME.visYellow;
+        if (nm >= 500) return THEME.visGreen;
+        if (nm >= 475) return THEME.visCyan;
+        if (nm >= 435) return THEME.visBlue;
+        return THEME.visViolet;
+      }
+      return null;
+    }
+
+    function renderWaveCanvas() {
+      const canvas = document.getElementById('emWaveCanvas');
+      const wrap = document.getElementById('canvasWrap');
+      if (!canvas || !wrap) return;
+
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const rect = wrap.getBoundingClientRect();
+      const w = Math.max(300, Math.floor(rect.width));
+      const h = Math.max(320, Math.floor(rect.height));
+
+      if (canvas.width !== Math.floor(w * dpr) || canvas.height !== Math.floor(h * dpr)) {
+        canvas.width = Math.floor(w * dpr);
+        canvas.height = Math.floor(h * dpr);
+      }
+
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      // Nền trắng sạch độ tương phản cao + lưới kĩ thuật mờ
+      ctx.fillStyle = THEME.bg;
+      ctx.fillRect(0, 0, w, h);
+
+      ctx.strokeStyle = THEME.grid;
+      ctx.lineWidth = 0.7;
+      ctx.beginPath();
+      const gridStep = 36;
+      for (let gx = 0; gx < w; gx += gridStep) {
+        ctx.moveTo(gx, 0);
+        ctx.lineTo(gx, h);
+      }
+      for (let gy = 0; gy < h; gy += gridStep) {
+        ctx.moveTo(0, gy);
+        ctx.lineTo(w, gy);
+      }
+      ctx.stroke();
+
+      const cx = w * 0.5;
+      const cy = h * 0.52;
+      const scalePx = Math.min(w, h) * 0.255;
+
+      const xMin = -1.65;
+      const xMax = 1.65;
+      const amp = 0.72 * (appState.ampPercent / 100);
+      const cycles = getWaveVisualFrequency();
+      const k = (2 * Math.PI * cycles) / (xMax - xMin);
+
+      // 1. Vẽ hệ trục tọa độ Oxyz chuẩn
+      const origin = { x: xMin, y: 0, z: 0 };
+      const pOxStart = project3D(xMin - 0.18, 0, 0, cx, cy, scalePx);
+      const pOxEnd = project3D(xMax + 0.35, 0, 0, cx, cy, scalePx);
+      const pOyNeg = project3D(xMin, -amp * 1.15, 0, cx, cy, scalePx);
+      const pOyPos = project3D(xMin, amp * 1.25, 0, cx, cy, scalePx);
+      const pOzNeg = project3D(xMin, 0, -amp * 1.15, cx, cy, scalePx);
+      const pOzPos = project3D(xMin, 0, amp * 1.25, cx, cy, scalePx);
+
+      // Đường trục âm nét đứt
+      ctx.save();
+      ctx.setLineDash([5, 5]);
+      ctx.strokeStyle = THEME.muted;
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(pOyNeg.sx, pOyNeg.sy);
+      ctx.lineTo(pOyPos.sx, pOyPos.sy);
+      ctx.moveTo(pOzNeg.sx, pOzNeg.sy);
+      ctx.lineTo(pOzPos.sx, pOzPos.sy);
+      ctx.stroke();
+      ctx.restore();
+
+      // Trục Ox chính (hướng truyền sóng)
+      drawCrispArrow2D(ctx, pOxStart.sx, pOxStart.sy, pOxEnd.sx, pOxEnd.sy, THEME.ink, 2.2, 11);
+      // Trục Oy (+E) & Oz (+B) tại gốc
+      drawCrispArrow2D(ctx, project3D(xMin, 0, 0, cx, cy, scalePx).sx, project3D(xMin, 0, 0, cx, cy, scalePx).sy, pOyPos.sx, pOyPos.sy, THEME.vecEText, 2, 10);
+      drawCrispArrow2D(ctx, project3D(xMin, 0, 0, cx, cy, scalePx).sx, project3D(xMin, 0, 0, cx, cy, scalePx).sy, pOzPos.sx, pOzPos.sy, THEME.vecBText, 2, 10);
+
+      // Ký hiệu góc vuông tại gốc Oxyz
+      if (appState.showOrtho) {
+        drawRightAngle3D(ctx, origin, { x: 1, y: 0, z: 0 }, { x: 0, y: 1, z: 0 }, 0.16, cx, cy, scalePx, THEME.ink);
+        drawRightAngle3D(ctx, origin, { x: 1, y: 0, z: 0 }, { x: 0, y: 0, z: 1 }, 0.16, cx, cy, scalePx, THEME.ink);
+        drawRightAngle3D(ctx, origin, { x: 0, y: 1, z: 0 }, { x: 0, y: 0, z: 1 }, 0.16, cx, cy, scalePx, THEME.ink);
+      }
+
+      // Nhãn tên trục (y/E, z/B, x/v)
+      ctx.save();
+      ctx.font = '700 13px "Space Grotesk", sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillStyle = THEME.vecEText;
+      ctx.fillText('y', pOyPos.sx, pOyPos.sy - 14);
+      ctx.fillStyle = THEME.vecBText;
+      ctx.fillText('z', pOzPos.sx + 12, pOzPos.sy + 10);
+      ctx.fillStyle = THEME.ink;
+      ctx.fillText('x', pOxEnd.sx + 14, pOxEnd.sy);
+      ctx.restore();
+
+      // 2. Đường bao hình sin & mặt phẳng dao động mờ cho E và B
+      const numCurvePts = 140;
+      const eCurve = [];
+      const bCurve = [];
+      const axisPts = [];
+
+      for (let i = 0; i <= numCurvePts; i++) {
+        const x = xMin + ((xMax - xMin) * i) / numCurvePts;
+        const val = Math.cos(appState.phase - k * (x - xMin));
+        axisPts.push(project3D(x, 0, 0, cx, cy, scalePx));
+        eCurve.push(project3D(x, amp * val, 0, cx, cy, scalePx));
+        bCurve.push(project3D(x, 0, amp * val, cx, cy, scalePx));
+      }
+
+      if (appState.showE) {
+        ctx.save();
+        ctx.fillStyle = THEME.vecEFill;
+        ctx.beginPath();
+        ctx.moveTo(axisPts[0].sx, axisPts[0].sy);
+        for (let i = 0; i < eCurve.length; i++) ctx.lineTo(eCurve[i].sx, eCurve[i].sy);
+        ctx.lineTo(axisPts[axisPts.length - 1].sx, axisPts[axisPts.length - 1].sy);
+        ctx.closePath();
+        ctx.fill();
+        ctx.restore();
+      }
+
+      if (appState.showB) {
+        ctx.save();
+        ctx.fillStyle = THEME.vecBFill;
+        ctx.beginPath();
+        ctx.moveTo(axisPts[0].sx, axisPts[0].sy);
+        for (let i = 0; i < bCurve.length; i++) ctx.lineTo(bCurve[i].sx, bCurve[i].sy);
+        ctx.lineTo(axisPts[axisPts.length - 1].sx, axisPts[axisPts.length - 1].sy);
+        ctx.closePath();
+        ctx.fill();
+        ctx.restore();
+      }
+
+      // 3. Các vectơ E và B dọc theo trục truyền sóng (sắp xếp theo độ sâu z2)
+      const numVectors = 26;
+      const drawables = [];
+      for (let i = 0; i <= numVectors; i++) {
+        const x = xMin + ((xMax - xMin) * i) / numVectors;
+        const val = Math.cos(appState.phase - k * (x - xMin));
+        const pBase = project3D(x, 0, 0, cx, cy, scalePx);
+
+        if (appState.showE) {
+          const pTipE = project3D(x, amp * val, 0, cx, cy, scalePx);
+          drawables.push({
+            depth: (pBase.depth + pTipE.depth) * 0.5,
+            type: 'E',
+            x0: pBase.sx,
+            y0: pBase.sy,
+            x1: pTipE.sx,
+            y1: pTipE.sy
+          });
+        }
+        if (appState.showB) {
+          const pTipB = project3D(x, 0, amp * val, cx, cy, scalePx);
+          drawables.push({
+            depth: (pBase.depth + pTipB.depth) * 0.5,
+            type: 'B',
+            x0: pBase.sx,
+            y0: pBase.sy,
+            x1: pTipB.sx,
+            y1: pTipB.sy
+          });
+        }
+      }
+
+      drawables.sort(function (a, b) {
+        return a.depth - b.depth;
+      });
+
+      for (let i = 0; i < drawables.length; i++) {
+        const d = drawables[i];
+        const col = d.type === 'E' ? THEME.vecE : THEME.vecB;
+        drawCrispArrow2D(ctx, d.x0, d.y0, d.x1, d.y1, col, 2.0, 8);
+      }
+
+      // Vẽ đường sin đậm nối ngọn các vectơ E và B
+      if (appState.showE) {
+        ctx.save();
+        ctx.strokeStyle = THEME.vecE;
+        ctx.lineWidth = 3.2;
+        ctx.lineJoin = 'round';
+        ctx.beginPath();
+        ctx.moveTo(eCurve[0].sx, eCurve[0].sy);
+        for (let i = 1; i < eCurve.length; i++) ctx.lineTo(eCurve[i].sx, eCurve[i].sy);
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      if (appState.showB) {
+        ctx.save();
+        ctx.strokeStyle = THEME.vecB;
+        ctx.lineWidth = 3.2;
+        ctx.lineJoin = 'round';
+        ctx.beginPath();
+        ctx.moveTo(bCurve[0].sx, bCurve[0].sy);
+        for (let i = 1; i < bCurve.length; i++) ctx.lineTo(bCurve[i].sx, bCurve[i].sy);
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      // 4. Điểm khảo sát x0 & Bộ 3 vectơ nổi bật + ký hiệu toán học chuẩn
+      const lambdaSpatial = (xMax - xMin) / cycles;
+      const probeX = Math.min(xMax - 0.15, xMin + appState.probeXNorm * lambdaSpatial);
+      const probePhi = appState.phase - k * (probeX - xMin);
+      const probeRatio = Math.cos(probePhi);
+      const signDir = probeRatio >= 0 ? 1 : -1;
+
+      const pProbe0 = project3D(probeX, 0, 0, cx, cy, scalePx);
+
+      // Mặt cắt tham chiếu mảnh tại x0 để thấy rõ mặt phẳng (E, B) vuông góc v
+      if (appState.showOrtho) {
+        const rBox = amp * 0.92;
+        const c1 = project3D(probeX, rBox, rBox, cx, cy, scalePx);
+        const c2 = project3D(probeX, rBox, -rBox, cx, cy, scalePx);
+        const c3 = project3D(probeX, -rBox, -rBox, cx, cy, scalePx);
+        const c4 = project3D(probeX, -rBox, rBox, cx, cy, scalePx);
+        ctx.save();
+        ctx.strokeStyle = THEME.ink;
+        ctx.setLineDash([4, 4]);
+        ctx.lineWidth = 1.4;
+        ctx.fillStyle = 'rgba(255, 204, 0, 0.08)';
+        ctx.beginPath();
+        ctx.moveTo(c1.sx, c1.sy);
+        ctx.lineTo(c2.sx, c2.sy);
+        ctx.lineTo(c3.sx, c3.sy);
+        ctx.lineTo(c4.sx, c4.sy);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+        ctx.restore();
+
+        // 3 góc vuông tại điểm khảo sát x0
+        const dE = { x: 0, y: signDir, z: 0 };
+        const dB = { x: 0, y: 0, z: signDir };
+        const dV = { x: 1, y: 0, z: 0 };
+        drawRightAngle3D(ctx, { x: probeX, y: 0, z: 0 }, dE, dB, 0.15, cx, cy, scalePx, THEME.ink);
+        drawRightAngle3D(ctx, { x: probeX, y: 0, z: 0 }, dE, dV, 0.15, cx, cy, scalePx, THEME.ink);
+        drawRightAngle3D(ctx, { x: probeX, y: 0, z: 0 }, dB, dV, 0.15, cx, cy, scalePx, THEME.ink);
+      }
+
+      // Chấm nổi bật tại điểm khảo sát x0
+      ctx.save();
+      ctx.fillStyle = THEME.probe;
+      ctx.strokeStyle = THEME.ink;
+      ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      ctx.arc(pProbe0.sx, pProbe0.sy, 6.5, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+      ctx.restore();
+
+      // Vectơ E nổi bật tại x0 + nhãn E⃗
+      if (appState.showE) {
+        const yTip = Math.abs(probeRatio) < 0.18 ? signDir * amp * 0.22 : amp * probeRatio;
+        const pTipE = project3D(probeX, yTip, 0, cx, cy, scalePx);
+        if (Math.abs(probeRatio) >= 0.06) {
+          drawCrispArrow2D(ctx, pProbe0.sx, pProbe0.sy, pTipE.sx, pTipE.sy, THEME.vecE, 4.2, 13, '#ffffff');
+        }
+        const badgePos = offsetBadgeFromSegment(pProbe0, pTipE, 26, 0, -18);
+        drawVectorSymbolBadge(ctx, 'E', null, badgePos.x, badgePos.y, THEME.vecE, THEME.vecEText, '#ffffff');
+      }
+
+      // Vectơ B nổi bật tại x0 + nhãn B⃗
+      if (appState.showB) {
+        const zTip = Math.abs(probeRatio) < 0.18 ? signDir * amp * 0.22 : amp * probeRatio;
+        const pTipB = project3D(probeX, 0, zTip, cx, cy, scalePx);
+        if (Math.abs(probeRatio) >= 0.06) {
+          drawCrispArrow2D(ctx, pProbe0.sx, pProbe0.sy, pTipB.sx, pTipB.sy, THEME.vecB, 4.2, 13, '#ffffff');
+        }
+        const badgePosB = offsetBadgeFromSegment(pProbe0, pTipB, 28, 14, 14);
+        drawVectorSymbolBadge(ctx, 'B', null, badgePosB.x, badgePosB.y, THEME.vecB, THEME.vecBText, '#ffffff');
+      }
+
+      // Vectơ v (Tốc độ truyền sóng) nổi bật tại x0 VÀ thanh hướng truyền phía trên
+      if (appState.showV) {
+        const pTipV = project3D(probeX + 0.62, 0, 0, cx, cy, scalePx);
+        drawCrispArrow2D(ctx, pProbe0.sx, pProbe0.sy, pTipV.sx, pTipV.sy, THEME.vecV, 4.5, 14, '#ffffff');
+        const badgePosV = offsetBadgeFromSegment(pProbe0, pTipV, 26, 10, -18);
+        drawVectorSymbolBadge(ctx, 'v', null, badgePosV.x, badgePosV.y, THEME.vecV, THEME.vecVText, '#ffffff');
+
+        // Thanh chỉ hướng truyền sóng tổng quát phía trên bên phải
+        const vGuideStart = project3D(0.55, amp * 1.18, 0, cx, cy, scalePx);
+        const vGuideEnd = project3D(1.45, amp * 1.18, 0, cx, cy, scalePx);
+        drawCrispArrow2D(ctx, vGuideStart.sx, vGuideStart.sy, vGuideEnd.sx, vGuideEnd.sy, THEME.vecV, 3.6, 13, '#ffffff');
+        drawVectorSymbolBadge(ctx, 'v', 'truyền', (vGuideStart.sx + vGuideEnd.sx) * 0.5, vGuideStart.sy - 24, THEME.vecV, THEME.vecVText, '#ffffff');
+      }
+
+      // Hiển thị màu ánh sáng nếu nằm trong dải nhìn thấy (380-760 nm) & đóng dấu bản quyền góc canvas
+      const visColor = getVisibleAccentColor(appState.lambdaMeters);
+      ctx.save();
+      if (visColor) {
+        ctx.fillStyle = visColor;
+        ctx.strokeStyle = THEME.ink;
+        ctx.lineWidth = 2;
+        ctx.fillRect(14, 14, 14, 14);
+        ctx.strokeRect(14, 14, 14, 14);
+        ctx.font = '700 12px "Space Grotesk", sans-serif';
+        ctx.fillStyle = THEME.ink;
+        ctx.textAlign = 'left';
+        ctx.fillText('Ánh sáng nhìn thấy (' + Math.round(appState.lambdaMeters * 1e9) + ' nm)', 34, 25);
+      } else {
+        const b = findBandByLambda(appState.lambdaMeters);
+        ctx.font = '700 12px "Space Grotesk", sans-serif';
+        ctx.fillStyle = THEME.ink;
+        ctx.textAlign = 'left';
+        ctx.fillText('Dải đang xét: ' + b.name, 14, 24);
+      }
+
+      // Đóng bản quyền nổi bật ở góc dưới phải khung mô phỏng
+      const stampText = '© Thầy PGT-THPT La Gi';
+      ctx.font = '700 12px "Space Grotesk", sans-serif';
+      const sw = ctx.measureText(stampText).width + 18;
+      const sx = w - sw - 12;
+      const sy = h - 34;
+      ctx.fillStyle = THEME.probe;
+      ctx.fillRect(sx, sy, sw, 24);
+      ctx.strokeStyle = THEME.ink;
+      ctx.lineWidth = 2;
+      ctx.strokeRect(sx, sy, sw, 24);
+      ctx.fillStyle = THEME.ink;
+      ctx.textAlign = 'center';
+      ctx.fillText(stampText, sx + sw / 2, sy + 16);
+      ctx.restore();
+
+      // Cập nhật bảng đồng hồ tức thời bên phải
+      updateTelemetryReadouts(probePhi, probeRatio);
+    }
+
+    function offsetBadgeFromSegment(p0, p1, distPx, fallbackDx, fallbackDy) {
+      const dx = p1.sx - p0.sx;
+      const dy = p1.sy - p0.sy;
+      const len = Math.hypot(dx, dy);
+      if (len < 6) {
+        return { x: p0.sx + fallbackDx, y: p0.sy + fallbackDy };
+      }
+      return {
+        x: p1.sx + (dx / len) * distPx,
+        y: p1.sy + (dy / len) * distPx
+      };
+    }
+
+    function updateTelemetryReadouts(probePhi, ratio) {
+      const vSpeed = C_VACUUM / appState.mediumN;
+      const elV = document.getElementById('readoutV');
+      if (elV) elV.textContent = formatSci(vSpeed, 2) + ' m/s';
+
+      // Đưa pha về [0, 2pi)
+      const twoPi = Math.PI * 2;
+      const modPhi = ((probePhi % twoPi) + twoPi) % twoPi;
+      const elPhi = document.getElementById('readoutPhase');
+      if (elPhi) elPhi.textContent = modPhi.toFixed(2).replace('.', ',') + ' rad';
+
+      const pct = Math.abs(ratio) * 50;
+      const leftPos = ratio >= 0 ? '50%' : (50 - pct) + '%';
+      const formattedRatio = (ratio >= 0 ? '+' : '') + ratio.toFixed(2).replace('.', ',');
+
+      const meterE = document.getElementById('meterE');
+      const meterB = document.getElementById('meterB');
+      const valE = document.getElementById('valRatioE');
+      const valB = document.getElementById('valRatioB');
+
+      if (meterE) {
+        meterE.style.left = leftPos;
+        meterE.style.width = pct + '%';
+      }
+      if (meterB) {
+        meterB.style.left = leftPos;
+        meterB.style.width = pct + '%';
+      }
+      if (valE) valE.textContent = formattedRatio;
+      if (valB) valB.textContent = formattedRatio;
+    }
+
+    // =========================================================================
+    // 5. ANIMATION LOOP & CAMERA INTERACTION
+    // =========================================================================
+    function startAnimationLoop() {
+      if (animFrameId) cancelAnimationFrame(animFrameId);
+      lastTickTime = performance.now();
+
+      function tick(now) {
+        const dt = Math.min(0.05, (now - lastTickTime) / 1000);
+        lastTickTime = now;
+
+        const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (appState.isPlaying && !prefersReduced) {
+          appState.phase += dt * 2.5 * appState.speed;
+          if (appState.phase > Math.PI * 200) appState.phase -= Math.PI * 200;
+        }
+        renderWaveCanvas();
+        animFrameId = requestAnimationFrame(tick);
+      }
+
+      animFrameId = requestAnimationFrame(tick);
+    }
+
+    function setupCanvasPointerControls() {
+      const wrap = document.getElementById('canvasWrap');
+      if (!wrap) return;
+
+      wrap.addEventListener('pointerdown', function (e) {
+        isDraggingCanvas = true;
+        dragStart = { x: e.clientX, y: e.clientY, yaw: appState.yaw, pitch: appState.pitch };
+        if (wrap.setPointerCapture) wrap.setPointerCapture(e.pointerId);
+      });
+
+      wrap.addEventListener('pointermove', function (e) {
+        if (!isDraggingCanvas) return;
+        const dx = e.clientX - dragStart.x;
+        const dy = e.clientY - dragStart.y;
+        appState.yaw = dragStart.yaw + dx * 0.008;
+        appState.pitch = Math.max(-1.45, Math.min(1.45, dragStart.pitch + dy * 0.008));
+        appState.camPreset = 'custom';
+        updateCameraButtons();
+        renderWaveCanvas();
+      });
+
+      function endDrag() {
+        if (!isDraggingCanvas) return;
+        isDraggingCanvas = false;
+        persistStateSoon();
+      }
+      wrap.addEventListener('pointerup', endDrag);
+      wrap.addEventListener('pointercancel', endDrag);
+    }
+
+    // =========================================================================
+    // 6. SIMULATOR CONTROL HANDLERS (Hoisted function declarations)
+    // =========================================================================
+    function setCameraPreset(preset) {
+      appState.camPreset = preset;
+      if (preset === '3d') {
+        appState.yaw = -0.46;
+        appState.pitch = 0.34;
+      } else if (preset === 'ev') {
+        appState.yaw = 0;
+        appState.pitch = 0;
+      } else if (preset === 'bv') {
+        appState.yaw = 0;
+        appState.pitch = 1.54;
+      } else if (preset === 'yz') {
+        appState.yaw = 1.53;
+        appState.pitch = 0.06;
+      }
+      updateCameraButtons();
+      renderWaveCanvas();
+      persistStateSoon();
+    }
+
+    function resetCamera() {
+      setCameraPreset('3d');
+    }
+
+    function updateCameraButtons() {
+      const map = { '3d': 'cam-3d', 'ev': 'cam-ev', 'bv': 'cam-bv', 'yz': 'cam-yz' };
+      Object.keys(map).forEach(function (key) {
+        const btn = document.getElementById(map[key]);
+        if (btn) btn.classList.toggle('is-active', appState.camPreset === key);
+      });
+    }
+
+    function togglePlayPause() {
+      appState.isPlaying = !appState.isPlaying;
+      syncPlayPauseButton();
+    }
+
+    function syncPlayPauseButton() {
+      const label = document.getElementById('playPauseLabel');
+      const btn = document.getElementById('btnPlayPause');
+      if (label) label.textContent = appState.isPlaying ? 'Tạm dừng' : 'Phát sóng';
+      if (btn) {
+        btn.classList.toggle('btn-primary', appState.isPlaying);
+        btn.classList.toggle('btn-blue', !appState.isPlaying);
+      }
+    }
+
+    function stepWave() {
+      appState.isPlaying = false;
+      appState.phase += Math.PI / 6; // +T/12
+      syncPlayPauseButton();
+      renderWaveCanvas();
+    }
+
+    function resetSimParams() {
+      appState.speed = DEFAULT_STATE.speed;
+      appState.ampPercent = DEFAULT_STATE.ampPercent;
+      appState.mediumN = DEFAULT_STATE.mediumN;
+      appState.probeXNorm = DEFAULT_STATE.probeXNorm;
+      appState.showE = true;
+      appState.showB = true;
+      appState.showV = true;
+      appState.showOrtho = true;
+      appState.isPlaying = true;
+      setCameraPreset('3d');
+      syncControlInputsFromState();
+      updateSpectrumReadouts();
+      persistStateSoon();
+    }
+
+    function toggleLayer(key, checked) {
+      appState[key] = Boolean(checked);
+      renderWaveCanvas();
+      persistStateSoon();
+    }
+
+    function updateProbeX(val) {
+      appState.probeXNorm = parseFloat(val);
+      const el = document.getElementById('valProbeX');
+      if (el) el.textContent = appState.probeXNorm.toFixed(2).replace('.', ',') + ' λ';
+      renderWaveCanvas();
+      persistStateSoon();
+    }
+
+    function updateSimSpeed(val) {
+      appState.speed = parseFloat(val);
+      const el = document.getElementById('valSpeed');
+      if (el) el.textContent = appState.speed.toFixed(1).replace('.', ',') + '×';
+      persistStateSoon();
+    }
+
+    function updateAmplitude(val) {
+      appState.ampPercent = parseInt(val, 10);
+      const el = document.getElementById('valAmp');
+      if (el) el.textContent = appState.ampPercent + '%';
+      renderWaveCanvas();
+      persistStateSoon();
+    }
+
+    function updateMediumN(val) {
+      appState.mediumN = Math.max(1.0, parseFloat(val));
+      const el = document.getElementById('valMediumN');
+      if (el) el.textContent = appState.mediumN.toFixed(2).replace('.', ',');
+      updateSpectrumReadouts();
+      renderWaveCanvas();
+      persistStateSoon();
+    }
+
+    function setMediumPreset(nVal) {
+      const slider = document.getElementById('sliderMediumN');
+      if (slider) slider.value = nVal;
+      updateMediumN(nVal);
+    }
+
+    function syncControlInputsFromState() {
+      const setVal = function (id, v) {
+        const el = document.getElementById(id);
+        if (el) el.value = v;
+      };
+      const setChecked = function (id, v) {
+        const el = document.getElementById(id);
+        if (el) el.checked = Boolean(v);
+      };
+      setVal('sliderProbeX', appState.probeXNorm);
+      setVal('sliderSpeed', appState.speed);
+      setVal('sliderAmp', appState.ampPercent);
+      setVal('sliderMediumN', appState.mediumN);
+      setChecked('chkVecE', appState.showE);
+      setChecked('chkVecB', appState.showB);
+      setChecked('chkVecV', appState.showV);
+      setChecked('chkOrtho', appState.showOrtho);
+
+      const elProbe = document.getElementById('valProbeX');
+      if (elProbe) elProbe.textContent = appState.probeXNorm.toFixed(2).replace('.', ',') + ' λ';
+      const elSpeed = document.getElementById('valSpeed');
+      if (elSpeed) elSpeed.textContent = appState.speed.toFixed(1).replace('.', ',') + '×';
+      const elAmp = document.getElementById('valAmp');
+      if (elAmp) elAmp.textContent = appState.ampPercent + '%';
+      const elN = document.getElementById('valMediumN');
+      if (elN) elN.textContent = appState.mediumN.toFixed(2).replace('.', ',');
+
+      syncPlayPauseButton();
+      updateCameraButtons();
+    }
+
+    // =========================================================================
+    // 7. ELECTROMAGNETIC SPECTRUM LOGIC & FORMATTING
+    // =========================================================================
+    function formatSci(num, digits) {
+      if (!isFinite(num) || num === 0) return '0';
+      const exp = Math.floor(Math.log10(Math.abs(num)));
+      const mant = num / Math.pow(10, exp);
+      const mantStr = mant.toFixed(digits || 2).replace('.', ',');
+      if (exp === 0) return mantStr;
+      return mantStr + ' × 10' + toSuperscript(exp);
+    }
+
+    function toSuperscript(n) {
+      const map = { '-': '⁻', '0': '⁰', '1': '¹', '2': '²', '3': '³', '4': '⁴', '5': '⁵', '6': '⁶', '7': '⁷', '8': '⁸', '9': '⁹' };
+      return String(n).split('').map(function (c) { return map[c] || c; }).join('');
+    }
+
+    function formatLambdaHuman(m) {
+      if (m >= 1000) return (m / 1000).toFixed(2).replace('.', ',') + ' km';
+      if (m >= 1) return m.toFixed(2).replace('.', ',') + ' m';
+      if (m >= 1e-2) return (m * 100).toFixed(2).replace('.', ',') + ' cm';
+      if (m >= 1e-3) return (m * 1000).toFixed(2).replace('.', ',') + ' mm';
+      if (m >= 1e-6) return (m * 1e6).toFixed(2).replace('.', ',') + ' µm';
+      if (m >= 1e-9) return (m * 1e9).toFixed(1).replace('.', ',') + ' nm';
+      if (m >= 1e-12) return (m * 1e12).toFixed(2).replace('.', ',') + ' pm';
+      return formatSci(m, 2) + ' m';
+    }
+
+    function formatEnergyHuman(joules) {
+      const ev = joules / E_CHARGE;
+      if (ev >= 1e6) return (ev / 1e6).toFixed(2).replace('.', ',') + ' MeV';
+      if (ev >= 1e3) return (ev / 1e3).toFixed(2).replace('.', ',') + ' keV';
+      if (ev >= 1) return ev.toFixed(2).replace('.', ',') + ' eV';
+      if (ev >= 1e-3) return (ev * 1e3).toFixed(2).replace('.', ',') + ' meV';
+      return formatSci(ev, 2) + ' eV';
+    }
+
+    function findBandByLambda(m) {
+      if (m >= 1.0) return BANDS[0];
+      if (m >= 1e-3) return BANDS[1];
+      if (m >= 7.6e-7) return BANDS[2];
+      if (m >= 3.8e-7) return BANDS[3];
+      if (m >= 1e-8) return BANDS[4];
+      if (m >= 1e-11) return BANDS[5];
+      return BANDS[6];
+    }
+
+    function selectBand(bandId) {
+      const band = BANDS.find(function (b) { return b.id === bandId; }) || BANDS[3];
+      appState.activeBandId = band.id;
+      appState.lambdaMeters = band.defaultLambda;
+      syncScrubberToLambda();
+      renderBandInspector(band);
+      updateSpectrumReadouts();
+      renderWaveCanvas();
+      persistStateSoon();
+    }
+
+    function setWavelengthMeters(m) {
+      appState.lambdaMeters = Math.max(1e-14, Math.min(1e4, m));
+      const band = findBandByLambda(appState.lambdaMeters);
+      appState.activeBandId = band.id;
+      syncScrubberToLambda();
+      renderBandInspector(band);
+      updateSpectrumReadouts();
+      renderWaveCanvas();
+      persistStateSoon();
+    }
+
+    function updateFromLogScrubber(sliderVal) {
+      // Slider goes from -4 (10^4 m) to +14 (10^-14 m), so lambda = 10^(-sliderVal)
+      const p = parseFloat(sliderVal);
+      appState.lambdaMeters = Math.pow(10, -p);
+      const band = findBandByLambda(appState.lambdaMeters);
+      if (appState.activeBandId !== band.id) {
+        appState.activeBandId = band.id;
+        renderBandInspector(band);
+      }
+      updateSpectrumReadouts();
+      renderWaveCanvas();
+      persistStateSoon();
+    }
+
+    function syncScrubberToLambda() {
+      const slider = document.getElementById('sliderLogLambda');
+      if (!slider) return;
+      const p = -Math.log10(Math.max(1e-14, Math.min(1e4, appState.lambdaMeters)));
+      slider.value = p.toFixed(2);
+    }
+
+    function updateSpectrumReadouts() {
+      const l0 = appState.lambdaMeters;
+      const lMed = l0 / appState.mediumN;
+      const freq = C_VACUUM / l0;
+      const energyJ = H_PLANCK * freq;
+
+      const elHuman = document.getElementById('valLambdaReadable');
+      if (elHuman) elHuman.textContent = formatLambdaHuman(l0);
+
+      const elL0 = document.getElementById('specLambda0');
+      if (elL0) elL0.textContent = formatSci(l0, 2) + ' m';
+
+      const elLMed = document.getElementById('specLambdaMed');
+      if (elLMed) elLMed.textContent = formatSci(lMed, 2) + ' m';
+
+      const elF = document.getElementById('specFreq');
+      if (elF) elF.textContent = formatSci(freq, 2) + ' Hz';
+
+      const elE = document.getElementById('specEnergy');
+      if (elE) elE.textContent = formatEnergyHuman(energyJ);
+    }
+
+    function getScaleIconSvg(kind) {
+      const stroke = 'currentColor';
+      if (kind === 'tower') {
+        return `<svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="${stroke}" stroke-width="2.5"><path d="M24 6v36M14 42l10-28 10 28M17 32h14M19 24h10"/><circle cx="24" cy="6" r="2.5" fill="${stroke}"/><path d="M16 10c-3 3-3 8 0 11M32 10c3 3 3 8 0 11"/></svg>`;
+      }
+      if (kind === 'dish') {
+        return `<svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="${stroke}" stroke-width="2.5"><path d="M10 14c0 13 11 24 24 24l-24-24z"/><path d="M22 26l10-10"/><circle cx="33" cy="15" r="2.5" fill="${stroke}"/><path d="M14 38h18M23 30v8"/></svg>`;
+      }
+      if (kind === 'thermo') {
+        return `<svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="${stroke}" stroke-width="2.5"><rect x="20" y="6" width="8" height="24" rx="4"/><circle cx="24" cy="34" r="7"/><path d="M24 14v16"/><path d="M33 12h6M33 18h4M33 24h6"/></svg>`;
+      }
+      if (kind === 'eye') {
+        return `<svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="${stroke}" stroke-width="2.5"><path d="M4 24s8-12 20-12 20 12 20 12-8 12-20 12S4 24 4 24z"/><circle cx="24" cy="24" r="6"/><circle cx="24" cy="24" r="2" fill="${stroke}"/></svg>`;
+      }
+      if (kind === 'sun') {
+        return `<svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="${stroke}" stroke-width="2.5"><circle cx="24" cy="24" r="9"/><path d="M24 5v6M24 37v6M5 24h6M37 24h6M10.5 10.5l4.2 4.2M33.3 33.3l4.2 4.2M37.5 10.5l-4.2 4.2M14.7 33.3l-4.2 4.2"/></svg>`;
+      }
+      if (kind === 'atom') {
+        return `<svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="${stroke}" stroke-width="2.2"><ellipse cx="24" cy="24" rx="18" ry="7" transform="rotate(35 24 24)"/><ellipse cx="24" cy="24" rx="18" ry="7" transform="rotate(-35 24 24)"/><circle cx="24" cy="24" r="3.5" fill="${stroke}"/></svg>`;
+      }
+      return `<svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="${stroke}" stroke-width="2.5"><circle cx="24" cy="24" r="4" fill="${stroke}"/><path d="M24 20L15 8h18L24 20zM20 26L7 33l9 10 4-17zM28 26l13 7-9 10-4-17z"/></svg>`;
+    }
+
+    function renderBandInspector(band) {
+      document.querySelectorAll('.band-btn').forEach(function (btn) {
+        const active = btn.dataset.band === band.id;
+        btn.classList.toggle('is-active', active);
+        btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+      });
+
+      const setTxt = function (id, txt) {
+        const el = document.getElementById(id);
+        if (el) el.textContent = txt;
+      };
+
+      setTxt('inspTitle', band.name);
+      setTxt('inspTag', band.tag);
+      setTxt('inspLambdaRange', band.lambdaRangeText);
+      setTxt('inspFreqRange', band.freqRangeText);
+      setTxt('inspEnergyRange', band.energyRangeText);
+      setTxt('inspAtmosphere', band.atmosphere);
+      setTxt('inspScaleName', band.scaleName);
+      setTxt('inspScaleDesc', band.scaleDesc);
+      setTxt('inspSources', band.sources);
+
+      const svgBox = document.getElementById('scaleSvgBox');
+      if (svgBox) svgBox.innerHTML = getScaleIconSvg(band.scaleIcon);
+
+      const visSubbar = document.getElementById('visSubbar');
+      if (visSubbar) visSubbar.style.display = band.id === 'vis' ? 'flex' : 'none';
+
+      const propsEl = document.getElementById('inspProps');
+      if (propsEl) {
+        propsEl.innerHTML = band.props.map(function (p) { return `<li>${p}</li>`; }).join('');
+      }
+
+      const appsEl = document.getElementById('inspApps');
+      if (appsEl) {
+        appsEl.innerHTML = band.apps.map(function (a) { return `<li>${a}</li>`; }).join('');
+      }
+
+      const presetsEl = document.getElementById('inspPresets');
+      if (presetsEl) {
+        presetsEl.innerHTML = band.presets.map(function (pr) {
+          return `<button type="button" class="chip-btn" onclick="setWavelengthMeters(${pr.lambda})">${pr.label}</button>`;
+        }).join('');
+      }
+    }
+
+    // =========================================================================
+    // 8. MINI INTERACTIVE QUIZ
+    // =========================================================================
+    const QUIZ_DATA = [
+      {
+        q: `Trong sóng điện từ, tại một điểm bất kì trên phương truyền sóng, các vectơ cường độ điện trường và cảm ứng từ dao động như thế nào?`,
+        options: [
+          `Vuông góc phương với nhau và dao động cùng pha.`,
+          `Song song phương với nhau và dao động ngược pha.`,
+          `Vuông góc phương với nhau và lệch pha π/2.`,
+          `Trùng với phương truyền sóng (sóng dọc).`
+        ],
+        correct: 0,
+        explain: `Chính xác! Trong sóng điện từ, E⃗ ⊥ B⃗ ⊥ v⃗ và tại mọi điểm, E⃗ và B⃗ luôn dao động cùng pha (khi E đạt cực đại thì B cũng đạt cực đại).`
+      },
+      {
+        q: `Tại thời điểm t và vị trí M, vectơ E⃗ hướng thẳng đứng lên trên (+Oy) và vectơ B⃗ hướng ra phía trước (+Oz). Sóng điện từ truyền theo hướng nào?`,
+        options: [
+          `Hướng sang trái (−Ox)`,
+          `Hướng sang phải (+Ox)`,
+          `Hướng xuống dưới (−Oy)`,
+          `Hướng vào trong (−Oz)`
+        ],
+        correct: 1,
+        explain: `Chính xác! Áp dụng quy tắc tam diện thuận (bàn tay phải): xoay từ E⃗ (+Oy) sang B⃗ (+Oz), ngón cái chỉ chiều truyền v⃗ theo hướng +Ox (sang phải).`
+      },
+      {
+        q: `Sắp xếp các bức xạ sau theo thứ tự bước sóng giảm dần (tần số tăng dần):`,
+        options: [
+          `Tia X → Tử ngoại → Ánh sáng nhìn thấy → Hồng ngoại`,
+          `Sóng vô tuyến → Hồng ngoại → Tử ngoại → Tia Gamma`,
+          `Tia Gamma → Sóng vi ba → Hồng ngoại → Sóng vô tuyến`,
+          `Ánh sáng nhìn thấy → Hồng ngoại → Tia X → Vi ba`
+        ],
+        correct: 1,
+        explain: `Đúng rồi! Thứ tự bước sóng giảm dần (tần số & năng lượng tăng dần): Vô tuyến → Vi ba → Hồng ngoại → Ánh sáng nhìn thấy → Tử ngoại → Tia X → Tia Gamma.`
+      },
+      {
+        q: `Khi một chùm tia Laser xanh lục (f không đổi) truyền từ chân không vào nước có chiết suất n = 1,33 thì đại lượng nào thay đổi?`,
+        options: [
+          `Tần số f tăng 1,33 lần.`,
+          `Tốc độ truyền sóng v không đổi bằng c.`,
+          `Tốc độ v và bước sóng λ đều giảm 1,33 lần.`,
+          `Bước sóng λ tăng 1,33 lần.`
+        ],
+        correct: 2,
+        explain: `Chính xác! Khi truyền sang môi trường chiết suất n, tần số f không đổi; tốc độ truyền sóng giảm còn v = c/n và bước sóng giảm còn λ = λ₀/n.`
+      }
+    ];
+
+    function renderQuiz() {
+      const idx = appState.quizIndex % QUIZ_DATA.length;
+      const item = QUIZ_DATA[idx];
+      const qEl = document.getElementById('quizQuestion');
+      const optsEl = document.getElementById('quizOptions');
+      const fbEl = document.getElementById('quizFeedback');
+      const scoreEl = document.getElementById('quizScoreBadge');
+
+      if (qEl) qEl.textContent = `Câu hỏi ${idx + 1}/${QUIZ_DATA.length}: ${item.q}`;
+      if (scoreEl) scoreEl.textContent = `Điểm: ${appState.quizScore}/${QUIZ_DATA.length}`;
+
+      const chosen = appState.quizAnswered[idx];
+      if (optsEl) {
+        optsEl.innerHTML = item.options.map(function (optText, i) {
+          let cls = 'quiz-opt';
+          if (chosen !== undefined) {
+            if (i === item.correct) cls += ' is-correct';
+            else if (i === chosen) cls += ' is-wrong';
+          }
+          return `<button type="button" class="${cls}" onclick="answerQuiz(${i})">${String.fromCharCode(65 + i)}. ${optText}</button>`;
+        }).join('');
+      }
+
+      if (fbEl) {
+        if (chosen === undefined) {
+          fbEl.textContent = `Chọn một đáp án để kiểm tra nhanh kiến thức và xem giải thích chi tiết.`;
+        } else if (chosen === item.correct) {
+          fbEl.textContent = item.explain;
+        } else {
+          fbEl.textContent = `Chưa chính xác. Gợi ý: ${item.explain}`;
+        }
+      }
+    }
+
+    function answerQuiz(optionIdx) {
+      const idx = appState.quizIndex % QUIZ_DATA.length;
+      if (appState.quizAnswered[idx] !== undefined) return;
+      appState.quizAnswered[idx] = optionIdx;
+      if (optionIdx === QUIZ_DATA[idx].correct) {
+        appState.quizScore += 1;
+      }
+      renderQuiz();
+      persistStateSoon();
+    }
+
+    function nextQuizQuestion() {
+      appState.quizIndex = (appState.quizIndex + 1) % QUIZ_DATA.length;
+      renderQuiz();
+      persistStateSoon();
+    }
+
+    function resetQuiz() {
+      appState.quizIndex = 0;
+      appState.quizScore = 0;
+      appState.quizAnswered = {};
+      renderQuiz();
+      persistStateSoon();
+    }
+
+    // =========================================================================
+    // 9. INITIALIZATION & SHIM LIFECYCLE
+    // =========================================================================
+    function renderMathInPage() {
+      if (typeof window.renderMathInElement === 'function') {
+        window.renderMathInElement(document.body, {
+          delimiters: [
+            { left: '$$', right: '$$', display: true },
+            { left: '$', right: '$', display: false }
+          ],
+          throwOnError: false
+        });
+      }
+    }
+
+    async function initApp() {
+      refreshThemeTokens();
+
+      if (window.notebookAppApi && typeof window.notebookAppApi.getAppState === 'function') {
+        try {
+          const saved = await window.notebookAppApi.getAppState();
+          if (saved && typeof saved === 'object') {
+            appState = Object.assign({}, DEFAULT_STATE, saved);
+          }
+        } catch (err) {
+          // Tiếp tục với trạng thái mặc định nếu chưa có dữ liệu
+        }
+      }
+
+      syncControlInputsFromState();
+      syncScrubberToLambda();
+      const activeBand = BANDS.find(function (b) { return b.id === appState.activeBandId; }) || findBandByLambda(appState.lambdaMeters);
+      renderBandInspector(activeBand);
+      updateSpectrumReadouts();
+      renderQuiz();
+      setupCanvasPointerControls();
+
+      if (window.lucide && typeof window.lucide.createIcons === 'function') {
+        window.lucide.createIcons();
+      }
+      renderMathInPage();
+
+      window.addEventListener('resize', function () {
+        renderWaveCanvas();
+      });
+
+      window.addEventListener('keydown', function (e) {
+        if (e.code === 'Space' && e.target.tagName !== 'BUTTON' && e.target.tagName !== 'INPUT') {
+          e.preventDefault();
+          togglePlayPause();
+        }
+      });
+
+      renderWaveCanvas();
+      startAnimationLoop();
+
+      if (window.notebookAppApi && typeof window.notebookAppApi.notifyAppReady === 'function') {
+        window.notebookAppApi.notifyAppReady();
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', initApp);
+  </script>
+</body>
+</html>
